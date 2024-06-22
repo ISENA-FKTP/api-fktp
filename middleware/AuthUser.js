@@ -17,7 +17,6 @@ export const verifyUser = async (req, res, next) => {
     if (!user) {
       return res.status(404).json({ msg: "User not found at Verify User" });
     }
-
     req.userDbId = user.id;
     next();
   } catch (error) {

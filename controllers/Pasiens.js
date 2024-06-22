@@ -168,7 +168,7 @@ export const createPasien = async (req, res) => {
     role,
   } = req.body;
   try {
-    await Pasiens.create({
+    const pasien = await Pasiens.create({
       nobpjs: nobpjs,
       nama: nama,
       statuspeserta: statuspeserta,
@@ -180,7 +180,11 @@ export const createPasien = async (req, res) => {
       role: role,
       userId: req.userDbId,
     });
-    res.status(201).json({ msg: "Data Pasien Berhasil Dimasukan!" });
+
+    res.status(201).json({
+      msg: "Data Pasien Berhasil Dimasukan!",
+      userId: pasien.id,
+    });
   } catch (error) {
     console.error(
       "Error menambahkan pasien:",
