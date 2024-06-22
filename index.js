@@ -23,9 +23,9 @@ import DatasakitRoute from "./routes/datasakit_pegawai/DatasakitRoute.js";
 import HomevisitRoute from "./routes/datasakit_pegawai/HomevisitRoute.js";
 import TotalPenyakitRoute from "./routes/data_statistik/TotalPenyakitRoute.js";
 import DeletedataobatRoute from "./routes/itemobat_apoteker/DeletedataobatRoute.js";
-// import { verifyToken } from "./middleware/verifyToken.js";
-// import { verifyUser } from "./middleware/AuthUser.js";
-// import { refreshToken } from "./controllers/RefreshToken.js";
+import { verifyToken } from "./middleware/verifyToken.js";
+import { verifyUser } from "./middleware/AuthUser.js";
+import { refreshToken } from "./controllers/RefreshToken.js";
 
 dotenv.config();
 
@@ -53,15 +53,14 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
 // 4. Sync database
-// (async () => {
-//   await db.sync();
-// })();
+(async () => {
+  await db.sync();
+})();
 
 // 5. Use routes - make sure this comes after the middleware setup
 app.use(AuthRoute);
-// app.use(verifyToken);
-// app.use(verifyUser);
-// app.get("/refresh-token", refreshToken);
+app.use(verifyToken);
+app.use(verifyUser);
 
 // Protected routes
 app.use(UserRoute);
@@ -88,3 +87,5 @@ const PORT = process.env.APP_PORT || 5000;
 app.listen(PORT, () => {
   console.log(`Server up and running on port ${PORT}`);
 });
+
+

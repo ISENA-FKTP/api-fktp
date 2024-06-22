@@ -4,9 +4,6 @@ export const verifyToken = (req, res, next) => {
   const authHeader = req.headers["authorization"];
   const token = authHeader && authHeader.split(" ")[1];
 
-  console.log("Authorization Header:", authHeader);
-  console.log("Token:", token);
-
   if (!token) {
     console.log("Token tidak ditemukan di header");
     return res.status(401).json({ message: "Token tidak ditemukan" });
@@ -21,6 +18,7 @@ export const verifyToken = (req, res, next) => {
     req.userId = decoded.uuid;
     req.username = decoded.username;
     req.role = decoded.role;
+    console.log("Token berhasil diverifikasi, userId:", req.userId);
     next();
   });
 };

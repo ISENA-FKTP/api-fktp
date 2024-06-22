@@ -19,7 +19,6 @@ export const verifyUser = async (req, res, next) => {
     }
 
     req.userDbId = user.id;
-    console.log("User role:", user.role);
     next();
   } catch (error) {
     console.error("Error finding user:", error);
@@ -28,6 +27,7 @@ export const verifyUser = async (req, res, next) => {
 };
 
 const checkRole = (roles) => async (req, res, next) => {
+  console.log("Checking role:", roles);
   try {
     const user = await Users.findOne({
       where: {

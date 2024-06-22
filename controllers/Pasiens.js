@@ -155,6 +155,7 @@ export const getPasienByNoBPJS = async (req, res) => {
 };
 
 export const createPasien = async (req, res) => {
+  console.log("Membuat pasien baru...");
   const {
     nobpjs,
     nama,
@@ -166,7 +167,6 @@ export const createPasien = async (req, res) => {
     norm,
     role,
   } = req.body;
-
   try {
     await Pasiens.create({
       nobpjs: nobpjs,

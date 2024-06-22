@@ -3,26 +3,18 @@ import jwt from "jsonwebtoken";
 
 export const refreshToken = async (req, res) => {
   try {
-    const { refreshToken } = req.query;
+    const refreshToken = req.headers["authorization"];
 
     if (!refreshToken) {
-      console.log("No refresh token in query");
+      console.log("No refresh token provided");
       return res.sendStatus(401);
     }
 
-    const user = await Users.findOne({
-      where: {
-        jwt_token: refreshToken,
-      },
-    });
+    const token = refreshToken.replace("Bearer ", "");
 
-    if (!user) {
-      console.log("Refresh token not found in database");
-      return res.sendStatus(401);
-    }
-
+    // Verifikasi refresh token
     jwt.verify(
-      refreshToken,
+      token,
       process.env.REFRESH_TOKEN_SECRET,
       async (err, decoded) => {
         if (err) {
@@ -30,15 +22,21 @@ export const refreshToken = async (req, res) => {
           return res.sendStatus(403);
         }
 
-        const { exp: accessTokenExpiry } = decoded;
+        // Refresh token valid, continue to generate new access token
+        const user = await Users.findOne({
+          where: {
+            jwt_token: token,
+          },
+        });
 
-        if (accessTokenExpiry > Date.now() / 1000) {
-          console.log("Access token is still valid, no need to refresh");
-          return res.status(200).json({ accessToken: null });
+        if (!user) {
+          console.log("Refresh token not found in database");
+          return res.sendStatus(401);
         }
 
         const { uuid, username, email, satuankerja, role } = user;
 
+        // Generate new access token
         const newAccessToken = jwt.sign(
           { uuid, username, email, satuankerja, role },
           process.env.ACCESS_TOKEN_SECRET,
@@ -47,7 +45,8 @@ export const refreshToken = async (req, res) => {
           }
         );
 
-        return res.json({ accessToken: newAccessToken });
+        // Send new access token back to the client
+        res.json({ accessToken: newAccessToken });
       }
     );
   } catch (error) {

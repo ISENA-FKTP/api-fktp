@@ -13,7 +13,6 @@ import { verifyUser, adminOnly } from "../middleware/AuthUser.js";
 const router = express.Router();
 
 router.get("/pasiens", verifyToken, verifyUser, getPasiens);
-// router.get("/pasiens/:id", verifyToken, verifyUser, getPasienById);
 router.get(
   "/pasiens/nobpjs/:nobpjs",
   verifyToken,
