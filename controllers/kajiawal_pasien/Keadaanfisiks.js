@@ -38,7 +38,7 @@ export const getKFs = async (req, res) => {
         include: [
           {
             model: Pasiens,
-            attributes: ["uuid", "nama", "nobpjs"], // tambahkan atribut yang Anda perlukan dari model Pasiens
+            attributes: ["uuid", "nama", "nobpjs"],
           },
         ],
       });

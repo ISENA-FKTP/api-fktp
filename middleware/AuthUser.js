@@ -2,6 +2,7 @@ import Users from "../models/UserModel.js";
 
 export const verifyUser = async (req, res, next) => {
   console.log("Verifying user with UUID:", req.userId);
+  console.log("User Role:", req.role);
 
   if (!req.userId) {
     return res.status(401).json({ msg: "Please login in your account!" });
@@ -41,7 +42,7 @@ const checkRole = (roles) => async (req, res, next) => {
     if (!roles.includes(user.role)) {
       return res.status(403).json({ msg: "Access denied" });
     }
-
+    req.role = user.role;
     next();
   } catch (error) {
     console.error("Error finding user:", error);

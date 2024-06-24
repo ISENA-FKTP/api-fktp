@@ -22,6 +22,7 @@ export const verifyPasien = async (req, res, next) => {
 
     req.pasienId = pasien.id;
     console.log("User ID:", req.userId);
+
     next();
   } catch (error) {
     return res.status(500).json({ msg: error.message });
