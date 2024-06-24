@@ -2,13 +2,15 @@ import Pegawais from "../models/PegawaiModel.js";
 
 export const verifyPegawai = async (req, res, next) => {
   try {
-    if (!req.session.pegawaiId) {
-      return res.status(401).json({ msg: "Mohon Masukan Data Pegawai" });
+    const pegawaiId = req.userDbId;
+    console.log("Pegawai ID:", pegawaiId);
+    if (!pegawaiId) {
+      return res.status(401).json({ msg: "Mohon masukkan data pegawai" });
     }
 
     const pegawai = await Pegawais.findOne({
       where: {
-        uuid: req.session.pegawaiId,
+        userId: pegawaiId,
       },
     });
 
@@ -17,6 +19,8 @@ export const verifyPegawai = async (req, res, next) => {
     }
 
     req.pegawaiId = pegawai.id;
+    console.log("Pegawai ID:", req.pegawaiId);
+
     next();
   } catch (error) {
     return res.status(500).json({ msg: error.message });

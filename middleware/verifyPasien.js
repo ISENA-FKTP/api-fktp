@@ -1,10 +1,8 @@
 import Pasiens from "../models/PasienModel.js";
 
 export const verifyPasien = async (req, res, next) => {
-  console.log("Body:", req.body);
-
   try {
-    const { pasienId } = req.body;
+    const { pasienId } = req.userDbId;
     console.log("Pasien ID:", pasienId);
     if (!pasienId) {
       return res.status(401).json({ msg: "Mohon masukkan data pasien" });
@@ -12,7 +10,7 @@ export const verifyPasien = async (req, res, next) => {
 
     const pasien = await Pasiens.findOne({
       where: {
-        id: pasienId,
+        userId: pasienId,
       },
     });
 

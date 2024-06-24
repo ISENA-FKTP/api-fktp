@@ -20,7 +20,7 @@ export const getDatasakits = async (req, res) => {
         include: [
           {
             model: Pegawais,
-            attributes: ["namapegawai", "nrp"],
+            attributes: ["namapegawai", "nrp", "satuankerja", "pangkat"],
           },
         ],
       });
@@ -117,15 +117,15 @@ export const getDatasakitById = async (req, res) => {
 };
 
 export const createDatasakit = async (req, res) => {
-  console.log(req.body);
   const {
     jenispenyakit,
     jenisperawatan,
     lamacuti,
     awalsakit,
     keterangan,
-    wfh,
+    WFH,
     sumberbiaya,
+    pegawaiId,
   } = req.body;
   try {
     await Datasakits.create({
@@ -134,9 +134,9 @@ export const createDatasakit = async (req, res) => {
       lamacuti: lamacuti,
       awalsakit: awalsakit,
       keterangan: keterangan,
-      wfh: wfh,
+      WFH: WFH,
       sumberbiaya: sumberbiaya,
-      pegawaiId: req.userDbId,
+      pegawaiId: pegawaiId,
     });
     console.log();
     res.status(201).json({ msg: "Data Sakit Pegawai Berhasil Dimasukan!" });

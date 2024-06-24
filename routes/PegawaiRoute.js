@@ -7,15 +7,15 @@ import {
   updatePegawai,
   deletePegawai,
 } from "../controllers/Pegawais.js";
-import { verifyUser, pawasOnly } from "../middleware/AuthUser.js";
+import { pawasOnly } from "../middleware/AuthUser.js";
 
 const router = express.Router();
 
-router.get("/pegawais", verifyUser, getPegawais);
-router.get("/pegawais/:id", verifyUser, getPegawaiById);
-router.get("/pegawais/nonrp/:nrp", verifyUser, getPegawaiByNoNRP);
-router.post("/pegawais", verifyUser, pawasOnly, createPegawai);
-router.patch("/pegawais/:id", verifyUser, pawasOnly, updatePegawai);
-router.delete("/pegawais/:id", verifyUser, pawasOnly, deletePegawai);
+router.get("/pegawais", getPegawais);
+router.get("/pegawais/:id", getPegawaiById);
+router.get("/pegawais/nonrp/:nrp", getPegawaiByNoNRP);
+router.post("/pegawais", pawasOnly, createPegawai);
+router.patch("/pegawais/:id", pawasOnly, updatePegawai);
+router.delete("/pegawais/:id", pawasOnly, deletePegawai);
 
 export default router;
