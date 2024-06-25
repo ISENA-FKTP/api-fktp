@@ -16,6 +16,7 @@ export const getDatasakits = async (req, res) => {
           "wfh",
           "sumberbiaya",
           "createdAt",
+          "pegawaiId",
         ],
         include: [
           {
@@ -82,7 +83,13 @@ export const getDatasakitById = async (req, res) => {
         include: [
           {
             model: Pegawais,
-            attributes: ["namapegawai", "nrp"],
+            attributes: [
+              "uuid",
+              "namapegawai",
+              "nrp",
+              "satuankerja",
+              "pangkat",
+            ],
           },
         ],
       });
@@ -110,6 +117,97 @@ export const getDatasakitById = async (req, res) => {
         ],
       });
     }
+    res.status(200).json(response);
+  } catch (error) {
+    res.status(500).json({ msg: error.message });
+  }
+};
+
+export const getDatasakitByPegawaiId = async (req, res) => {
+  try {
+    const datasakitList = await Datasakits.findAll({
+      where: {
+        pegawaiId: req.params.id,
+      },
+      include: [
+        {
+          model: Pegawais,
+          attributes: ["uuid", "namapegawai", "nrp", "satuankerja", "pangkat"],
+        },
+      ],
+    });
+
+    if (!datasakitList.length)
+      return res.status(404).json({ msg: "Data not found!" });
+
+    let response;
+    if (req.role === "pegawai") {
+      response = datasakitList.map((datasakit) => {
+        const {
+          uuid,
+          jenispenyakit,
+          jenisperawatan,
+          lamacuti,
+          awalsakit,
+          keterangan,
+          WFH,
+          sumberbiaya,
+          createdAt,
+          pegawai,
+        } = datasakit.dataValues;
+
+        return {
+          uuid,
+          jenispenyakit,
+          jenisperawatan,
+          lamacuti,
+          awalsakit,
+          keterangan,
+          WFH,
+          sumberbiaya,
+          createdAt,
+          Pegawais: {
+            uuid: pegawai.dataValues.uuid,
+            namapegawai: pegawai.dataValues.namapegawai,
+            nrp: pegawai.dataValues.nrp,
+            satuankerja: pegawai.dataValues.satuankerja,
+            pangkat: pegawai.dataValues.pangkat,
+          },
+        };
+      });
+    } else {
+      response = datasakitList.map((datasakit) => {
+        const {
+          uuid,
+          jenispenyakit,
+          jenisperawatan,
+          lamacuti,
+          awalsakit,
+          keterangan,
+          WFH,
+          sumberbiaya,
+          createdAt,
+          pegawai,
+        } = datasakit.dataValues;
+
+        return {
+          uuid,
+          jenispenyakit,
+          jenisperawatan,
+          lamacuti,
+          awalsakit,
+          keterangan,
+          WFH,
+          sumberbiaya,
+          createdAt,
+          Pegawais: {
+            namapegawai: pegawai.dataValues.namapegawai,
+            nrp: pegawai.dataValues.nrp,
+          },
+        };
+      });
+    }
+
     res.status(200).json(response);
   } catch (error) {
     res.status(500).json({ msg: error.message });

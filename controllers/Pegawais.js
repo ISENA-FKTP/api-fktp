@@ -4,7 +4,7 @@ import Users from "../models/UserModel.js";
 export const getPegawais = async (req, res) => {
   try {
     let response;
-    if (req.role === "pawas") {
+    if (req.role === "pegawai") {
       response = await Pegawais.findAll({
         attributes: [
           "uuid",
@@ -52,14 +52,15 @@ export const getPegawaiById = async (req, res) => {
   try {
     const pegawai = await Pegawais.findOne({
       where: {
-        uuid: req.params.id,
+        uuid: req.params.uuid,
       },
     });
     if (!pegawai) return res.status(404).json({ msg: "Data not found!" });
     let response;
-    if (req.role === "pawas") {
+    if (req.role === "pegawai") {
       response = await Pegawais.findOne({
         attributes: [
+          "id",
           "uuid",
           "namapegawai",
           "nrp",
@@ -105,9 +106,8 @@ export const getPegawaiById = async (req, res) => {
 };
 
 export const getPegawaiByNoNRP = async (req, res) => {
-  console.log("Nomor NRP:", req.params.nrp);
   try {
-    const pegawai = await Pegawais.findOne({
+    const pegawais = await Pegawais.findAll({
       where: {
         nrp: req.params.nrp,
       },
@@ -118,12 +118,12 @@ export const getPegawaiByNoNRP = async (req, res) => {
         },
       ],
     });
-    if (!pegawai) {
+    if (!pegawais || pegawais.length === 0) {
       return res
         .status(404)
         .json({ msg: "Pegawai dengan NRP ini tidak ditemukan." });
     }
-    res.status(200).json(pegawai);
+    res.status(200).json(pegawais);
   } catch (error) {
     res.status(500).json({ msg: error.message });
   }
@@ -157,7 +157,7 @@ export const updatePegawai = async (req, res) => {
     });
     if (!pegawai) return res.status(404).json({ msg: "Data not found!" });
     const { namapegawai, nrp, pangkat, satuankerja } = req.body;
-    if (req.role === "pawas") {
+    if (req.role === "pegawai") {
       await Pegawais.update(
         { namapegawai, nrp, pangkat, satuankerja },
         {
@@ -193,7 +193,7 @@ export const deletePegawai = async (req, res) => {
     });
     if (!pegawai) return res.status(404).json({ msg: "Data not found!" });
     const { namapegawai, nrp, pangkat, satuankerja } = req.body;
-    if (req.role === "pawas") {
+    if (req.role === "pegawai") {
       await Pegawais.destroy({
         where: {
           id: pegawai.id,
