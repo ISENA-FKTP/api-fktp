@@ -25,7 +25,6 @@ import TotalPenyakitRoute from "./routes/data_statistik/TotalPenyakitRoute.js";
 import DeletedataobatRoute from "./routes/itemobat_apoteker/DeletedataobatRoute.js";
 import { verifyToken } from "./middleware/verifyToken.js";
 import { verifyUser } from "./middleware/AuthUser.js";
-import { refreshToken } from "./controllers/RefreshToken.js";
 
 dotenv.config();
 
