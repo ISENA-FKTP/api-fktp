@@ -94,13 +94,22 @@ export const getPengajuanById = async (req, res) => {
 };
 
 export const createPengajuan = async (req, res) => {
-  const { politujuan, perawatan, jeniskunjungan, keluhan } = req.body;
+  const {
+    politujuan,
+    perawatan,
+    jeniskunjungan,
+    keluhan,
+    anamnesia,
+    tanggalKunjungan,
+  } = req.body;
   try {
     const pengajuan = await Pengajuans.create({
       politujuan: politujuan,
       perawatan: perawatan,
       jeniskunjungan: jeniskunjungan,
       keluhan: keluhan,
+      anamnesia: anamnesia,
+      tanggalKunjungan: tanggalKunjungan,
       pasienId: req.pasienId,
     });
 

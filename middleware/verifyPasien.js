@@ -2,7 +2,7 @@ import Pasiens from "../models/PasienModel.js";
 
 export const verifyPasien = async (req, res, next) => {
   try {
-    const { pasienId } = req.userDbId;
+    const pasienId = req.userDbId;
     console.log("Pasien ID:", pasienId);
     if (!pasienId) {
       return res.status(401).json({ msg: "Mohon masukkan data pasien" });
