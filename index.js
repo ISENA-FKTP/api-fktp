@@ -3,28 +3,35 @@ import db from "./config/Database.js";
 import cors from "cors";
 import dotenv from "dotenv";
 import helmet from "helmet";
+
 import UserRoute from "./routes/UserRoute.js";
-import AuthRoute from "./routes/AuthRoute.js";
-import PasienRoute from "./routes/PasienRoute.js";
-import AuthPasienRoute from "./routes/AuthPasienRoute.js";
-import KeadaanfisikRoute from "./routes/kajiawal_pasien/KeadaanfisikRoute.js";
-import PengajuanRoute from "./routes/kajiawal_pasien/PengajuanRoute.js";
-import TekanandarahRoute from "./routes/kajiawal_pasien/TekanandarahRoute.js";
-import DiagnosaRoute from "./routes/datakunjungan_dokter/DiagnosaRoute.js";
-import PemeriksaanRoute from "./routes/datakunjungan_dokter/PemeriksaanRoute.js";
-import PelayananRoute from "./routes/datakunjungan_dokter/PelayananRoute.js";
-import ObatRoute from "./routes/datakunjungan_dokter/ObatRoute.js";
-import RiwayatalergiRoute from "./routes/datakunjungan_dokter/RiwayatalergiRoute.js";
-import TandatanganRoute from "./routes/datakunjungan_dokter/TandatanganRoute.js";
-import DataobatRoute from "./routes/itemobat_apoteker/DataobatRoute.js";
-import PegawaiRoute from "./routes/PegawaiRoute.js";
-import AuthPegawaiRoute from "./routes/AuthPegawaiRoute.js";
-import DatasakitRoute from "./routes/datasakit_pegawai/DatasakitRoute.js";
-import HomevisitRoute from "./routes/datasakit_pegawai/HomevisitRoute.js";
-import TotalPenyakitRoute from "./routes/data_statistik/TotalPenyakitRoute.js";
-import DeletedataobatRoute from "./routes/itemobat_apoteker/DeletedataobatRoute.js";
-import { verifyToken } from "./middleware/verifyToken.js";
-import { verifyUser } from "./middleware/AuthUser.js";
+import AuthRoute from "./routes//login/AuthRoute.js";
+import TokenRoute from "./routes//login/AuthRoute.js";
+
+import PasienRoute from "./routes/pasien/PasienRoute.js";
+import AuthPasienRoute from "./routes/pasien/AuthPasienRoute.js";
+import KeadaanfisikRoute from "./routes/pasien/admin/kajiawal/KeadaanfisikRoute.js";
+import PengajuanRoute from "./routes/pasien/admin/kajiawal/PengajuanRoute.js";
+import TekanandarahRoute from "./routes/pasien/admin/kajiawal/TekanandarahRoute.js";
+
+import DiagnosaRoute from "./routes/pasien/dokter/datakunjungan/DiagnosaRoute.js";
+import ObatRoute from "./routes/pasien/dokter/datakunjungan/ObatRoute.js";
+import PelayananRoute from "./routes/pasien/dokter/datakunjungan/PelayananRoute.js";
+import PemeriksaanRoute from "./routes/pasien/dokter/datakunjungan/PemeriksaanRoute.js";
+import RiwayatalergiRoute from "./routes/pasien/dokter/datakunjungan/RiwayatalergiRoute.js";
+import TandatanganRoute from "./routes/pasien/dokter/datakunjungan/TandatanganRoute.js";
+
+import TotalpenyakitRoute from "./routes/pasien/data_statistik/TotalpenyakitRoute.js";
+
+import PegawaiRoute from "./routes/pegawai/PegawaiRoute.js";
+import AuthPegawaiRoute from "./routes/pegawai/AuthPegawaiRoute.js";
+import DatasakitRoute from "./routes/pegawai/datasakit/DatasakitRoute.js";
+import HomevisitRoute from "./routes/pegawai/datasakit/HomevisitRoute.js";
+
+import DataobatRoute from "./routes/apotek/DataobatRoute.js";
+import DeletedataobatRoute from "./routes/apotek/DeletedataobatRoute.js";
+
+import { verifyToken, verifyUser } from "./middleware/verify.js";
 
 dotenv.config();
 
@@ -58,6 +65,7 @@ app.use(express.json());
 
 // 5. Use routes - make sure this comes after the middleware setup
 app.use(AuthRoute);
+app.use(TokenRoute);
 app.use(verifyToken);
 app.use(verifyUser);
 
@@ -81,6 +89,7 @@ app.use(DatasakitRoute);
 app.use(HomevisitRoute);
 app.use(TotalPenyakitRoute);
 app.use(DeletedataobatRoute);
+app.use(TotalpenyakitRoute);
 
 const PORT = process.env.APP_PORT || 5000;
 app.listen(PORT, () => {
