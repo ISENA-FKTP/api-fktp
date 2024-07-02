@@ -5,7 +5,7 @@ import {
   createPengajuan,
   updatePengajuan,
   deletePengajuan,
-} from "../../controllers/kajiawal_pasien/Pengajuans.js";
+} from "../../../../controllers/pasien/admin/kajiawal/Pengajuans.js";
 import { verifyPasien } from "../../../../middleware/verify.js";
 import { klinikOnly } from "../../../../middleware/userOnly.js";
 

@@ -5,6 +5,7 @@ import {
   createDatasakit,
   updateDatasakit,
   deleteDatasakit,
+  getDatasakitByPegawaiId,
 } from "../../../controllers/pegawai/datasakit/Datasakits.js";
 import { verifyPegawai } from "../../../middleware/verify.js";
 import { pegawaiOnly } from "../../../middleware/userOnly.js";

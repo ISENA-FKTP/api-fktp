@@ -4,8 +4,8 @@ import Pasiens from "../../PasienModel.js";
 
 const { DataTypes } = Sequelize;
 
-const RAs = db.define(
-  "ras",
+const Pengajuans = db.define(
+  "pengajuans",
   {
     uuid: {
       type: DataTypes.STRING,
@@ -15,29 +15,43 @@ const RAs = db.define(
         notEmpty: true,
       },
     },
-    makanan: {
+    politujuan: {
       type: DataTypes.STRING,
       allowNull: false,
       validate: {
         notEmpty: true,
       },
     },
-    udara: {
+    perawatan: {
       type: DataTypes.STRING,
       allowNull: false,
       validate: {
         notEmpty: true,
       },
     },
-    obatan: {
+    jeniskunjungan: {
       type: DataTypes.STRING,
       allowNull: false,
       validate: {
         notEmpty: true,
       },
     },
-    prognasa: {
+    keluhan: {
       type: DataTypes.STRING,
+      allowNull: false,
+      validate: {
+        notEmpty: true,
+      },
+    },
+    anamnesia: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      validate: {
+        notEmpty: true,
+      },
+    },
+    tanggalKunjungan: {
+      type: DataTypes.DATE,
       allowNull: false,
       validate: {
         notEmpty: true,
@@ -56,7 +70,7 @@ const RAs = db.define(
   }
 );
 
-Pasiens.hasMany(RAs);
-RAs.belongsTo(Pasiens, { foreignKey: "pasienId" });
+Pasiens.hasMany(Pengajuans);
+Pengajuans.belongsTo(Pasiens, { foreignKey: "pasienId" });
 
-export default RAs;
+export default Pengajuans;

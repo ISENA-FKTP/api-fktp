@@ -5,7 +5,7 @@ import {
   createKF,
   updateKF,
   deleteKF,
-} from "../../controllers/kajiawal_pasien/Keadaanfisiks.js";
+} from "../../../../controllers/pasien/admin/kajiawal/Keadaanfisiks.js";
 import { verifyPasien } from "../../../../middleware/verify.js";
 import { klinikOnly } from "../../../../middleware/userOnly.js";
 

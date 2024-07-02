@@ -5,7 +5,7 @@ import {
   createDataobat,
   updateDataobat,
   deleteDataobat,
-} from "../../controllers/itemobat_apoteker/Dataobats.js";
+} from "../../controllers/apotek/Dataobats.js";
 import { verifyUser } from "../../middleware/verify.js";
 import { apotekerOnly } from "../../middleware/userOnly.js";
 

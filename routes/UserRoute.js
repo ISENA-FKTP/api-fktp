@@ -6,6 +6,7 @@ import {
   updateUser,
   deleteUser,
 } from "../controllers/Users.js";
+import { adminOnly } from "../middleware/userOnly.js";
 
 const router = express.Router();
 

@@ -87,7 +87,7 @@ app.use(PegawaiRoute);
 app.use(AuthPegawaiRoute);
 app.use(DatasakitRoute);
 app.use(HomevisitRoute);
-app.use(TotalPenyakitRoute);
+app.use(TotalpenyakitRoute);
 app.use(DeletedataobatRoute);
 app.use(TotalpenyakitRoute);
 

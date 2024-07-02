@@ -2,6 +2,7 @@ import express from "express";
 import {
   getPegawais,
   getPegawaiById,
+  getPegawaiByNoNRP,
   createPegawai,
   updatePegawai,
   deletePegawai,

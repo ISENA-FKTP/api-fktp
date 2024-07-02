@@ -5,7 +5,7 @@ import {
   createTD,
   updateTD,
   deleteTD,
-} from "../../../../controllers/kajiawal_pasien/Tekanandarahs.js";
+} from "../../../../controllers/pasien/admin/kajiawal/Tekanandarahs.js";
 import { verifyPasien } from "../../../../middleware/verify.js";
 import { klinikOnly } from "../../../../middleware/userOnly.js";
 

@@ -1,11 +1,11 @@
 import { Sequelize } from "sequelize";
-import db from "../../config/Database.js";
-import Pasiens from "../PasienModel.js";
+import db from "../../../../config/Database.js";
+import Pasiens from "../../PasienModel.js";
 
 const { DataTypes } = Sequelize;
 
-const Pengajuans = db.define(
-  "pengajuans",
+const KFs = db.define(
+  "kfs",
   {
     uuid: {
       type: DataTypes.STRING,
@@ -15,48 +15,35 @@ const Pengajuans = db.define(
         notEmpty: true,
       },
     },
-    politujuan: {
-      type: DataTypes.STRING,
+    beratbadan: {
+      type: DataTypes.INTEGER,
       allowNull: false,
       validate: {
         notEmpty: true,
       },
     },
-    perawatan: {
-      type: DataTypes.STRING,
+    tinggibadan: {
+      type: DataTypes.INTEGER,
       allowNull: false,
       validate: {
         notEmpty: true,
       },
     },
-    jeniskunjungan: {
-      type: DataTypes.STRING,
+    lingkarperut: {
+      type: DataTypes.INTEGER,
       allowNull: false,
       validate: {
         notEmpty: true,
       },
     },
-    keluhan: {
-      type: DataTypes.STRING,
+    imtBBTB: {
+      type: DataTypes.INTEGER,
       allowNull: false,
       validate: {
         notEmpty: true,
       },
     },
-    anamnesia: {
-      type: DataTypes.STRING,
-      allowNull: false,
-      validate: {
-        notEmpty: true,
-      },
-    },
-    tanggalKunjungan: {
-      type: DataTypes.DATE,
-      allowNull: false,
-      validate: {
-        notEmpty: true,
-      },
-    },
+
     pasienId: {
       type: DataTypes.INTEGER,
       allowNull: true,
@@ -70,7 +57,7 @@ const Pengajuans = db.define(
   }
 );
 
-Pasiens.hasMany(Pengajuans);
-Pengajuans.belongsTo(Pasiens, { foreignKey: "pasienId" });
+Pasiens.hasMany(KFs);
+KFs.belongsTo(Pasiens, { foreignKey: "pasienId" });
 
-export default Pengajuans;
+export default KFs;

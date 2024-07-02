@@ -3,7 +3,7 @@ import {
   getTotalPenyakits,
   deleteTotalPenyakit,
 } from "../../../controllers/pasien/data_statistik/Totalpenyakits.js";
-import { statistikOnly } from "../../../middleware/verify.js";
+import { statistikOnly } from "../../../middleware/userOnly.js";
 
 const router = express.Router();
 
