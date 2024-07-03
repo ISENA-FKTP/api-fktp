@@ -13,7 +13,7 @@ const router = express.Router();
 
 router.get("/pelayanans", verifyPasien, getPelayanans);
 router.get("/pelayanans/:id", verifyPasien, getPelayananById);
-router.post("/pelayanans", verifyPasien, dokterOnly, createPelayanan);
+router.post("/pelayanans", dokterOnly, createPelayanan);
 router.patch("/pelayanans/:id", verifyPasien, dokterOnly, updatePelayanan);
 router.delete("/pelayanans/:id", verifyPasien, dokterOnly, deletePelayanan);
 

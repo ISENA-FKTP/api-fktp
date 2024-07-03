@@ -36,7 +36,7 @@ const RAs = db.define(
         notEmpty: true,
       },
     },
-    prognasa: {
+    prognosa: {
       type: DataTypes.STRING,
       allowNull: false,
       validate: {

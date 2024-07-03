@@ -77,14 +77,15 @@ export const getPemeriksaanById = async (req, res) => {
 };
 
 export const createPemeriksaan = async (req, res) => {
-  const { kasusKLL, namadokter, pelayanannonmedis, statuspulang } = req.body;
+  const { kasusKLL, namadokter, pelayanannonmedis, statuspulang, pasienId } =
+    req.body;
   try {
     const pemeriksaan = await Pemeriksaans.create({
       kasusKLL: kasusKLL,
       namadokter: namadokter,
       pelayanannonmedis: pelayanannonmedis,
       statuspulang: statuspulang,
-      pasienId: req.pasienId,
+      pasienId: pasienId,
     });
 
     res

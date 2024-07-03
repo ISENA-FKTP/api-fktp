@@ -15,9 +15,37 @@ const Diagonsas = db.define(
         notEmpty: true,
       },
     },
-    jenispenyakit: {
+    jenispenyakit1: {
       type: DataTypes.STRING,
       allowNull: false,
+      validate: {
+        notEmpty: true,
+      },
+    },
+    jenispenyakit2: {
+      type: DataTypes.STRING,
+      allowNull: true,
+      validate: {
+        notEmpty: true,
+      },
+    },
+    jenispenyakit3: {
+      type: DataTypes.STRING,
+      allowNull: true,
+      validate: {
+        notEmpty: true,
+      },
+    },
+    jenispenyakit4: {
+      type: DataTypes.STRING,
+      allowNull: true,
+      validate: {
+        notEmpty: true,
+      },
+    },
+    jenispenyakit5: {
+      type: DataTypes.STRING,
+      allowNull: true,
       validate: {
         notEmpty: true,
       },

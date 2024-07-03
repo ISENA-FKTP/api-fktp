@@ -43,20 +43,6 @@ const Pengajuans = db.define(
         notEmpty: true,
       },
     },
-    anamnesia: {
-      type: DataTypes.STRING,
-      allowNull: false,
-      validate: {
-        notEmpty: true,
-      },
-    },
-    tanggalKunjungan: {
-      type: DataTypes.DATE,
-      allowNull: false,
-      validate: {
-        notEmpty: true,
-      },
-    },
     pasienId: {
       type: DataTypes.INTEGER,
       allowNull: true,

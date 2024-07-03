@@ -11,6 +11,7 @@ export const getPasiens = async (req, res) => {
     ) {
       pasiens = await Pasiens.findAll({
         attributes: [
+          "id",
           "uuid",
           "nobpjs",
           "nama",
@@ -32,6 +33,7 @@ export const getPasiens = async (req, res) => {
     } else {
       pasiens = await Pasiens.findAll({
         attributes: [
+          "id",
           "uuid",
           "nobpjs",
           "nama",
@@ -165,7 +167,7 @@ export const createPasien = async (req, res) => {
     !nobpjs ||
     !nama ||
     !statuspeserta ||
-    !tanggal ||
+    !tgllahir ||
     !gender ||
     !ppkumum ||
     !nohp ||

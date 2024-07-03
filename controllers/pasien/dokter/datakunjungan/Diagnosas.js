@@ -1,7 +1,7 @@
 import Diagnosas from "../../../../models/pasien/dokter/datakunjungan/DiagnosaModel.js";
 import Pasiens from "../../../../models/pasien/PasienModel.js";
-import TotalPenyakit from "../../../../models/pasien/data_statistik/TotalpenyakitModel.js";
 import { Op } from "sequelize";
+import Diagonsas from "../../../../models/pasien/dokter/datakunjungan/DiagnosaModel.js";
 
 export const getDiagnosas = async (req, res) => {
   try {
@@ -78,39 +78,27 @@ export const getDiagnosaById = async (req, res) => {
 };
 
 export const createDiagnosa = async (req, res) => {
-  const { jenispenyakit, kesadaran, suhu } = req.body;
+  const { jenispenyakit, kesadaran, suhu, pasienId } = req.body;
 
-  if (!jenispenyakit || !kesadaran || !suhu) {
+  if (!jenispenyakit || !kesadaran || !suhu || !pasienId) {
     return res.status(400).json({ msg: "Semua kolom harus diisi!" });
   }
 
+  const processedDiagnose = jenispenyakit.map((item) =>
+    item.trim() === "" ? null : item
+  );
+
   try {
     const diagnosa = await Diagnosas.create({
-      jenispenyakit: jenispenyakit,
+      jenispenyakit1: processedDiagnose[0],
+      jenispenyakit2: processedDiagnose[1],
+      jenispenyakit3: processedDiagnose[2],
+      jenispenyakit4: processedDiagnose[3],
+      jenispenyakit5: processedDiagnose[4],
       kesadaran: kesadaran,
       suhu: suhu,
-      pasienId: req.pasienId,
+      pasienId: pasienId,
     });
-
-    let totalPenyakit = await TotalPenyakit.findOne({
-      where: {
-        jenispenyakit: jenispenyakit,
-        userId: req.userId,
-      },
-    });
-
-    if (totalPenyakit) {
-      totalPenyakit.jumlah += 1;
-      await totalPenyakit.save();
-    } else {
-      await TotalPenyakit.create({
-        jenispenyakit: diagnosa.jenispenyakit,
-        kesadaran: diagnosa.kesadaran,
-        suhu: diagnosa.suhu,
-        jumlah: 1,
-        userId: req.userId,
-      });
-    }
 
     res
       .status(201)

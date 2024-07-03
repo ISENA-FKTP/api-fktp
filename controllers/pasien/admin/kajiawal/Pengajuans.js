@@ -3,9 +3,10 @@ import Pasiens from "../../../../models//pasien/PasienModel.js";
 import { Op } from "sequelize";
 
 export const getPengajuans = async (req, res) => {
+  console.log(req);
   try {
     let response;
-    if (req.role === "pasien") {
+    if (req.role === "dokter" || req.role === "admin") {
       response = await Pengajuans.findAll({
         attributes: [
           "uuid",
@@ -18,7 +19,7 @@ export const getPengajuans = async (req, res) => {
         include: [
           {
             model: Pasiens,
-            attributes: ["uuid", "nama", "nobpjs"],
+            attributes: ["id", "nama", "nobpjs"],
           },
         ],
       });
@@ -33,12 +34,12 @@ export const getPengajuans = async (req, res) => {
           "createdAt",
         ],
         where: {
-          pasienId: req.pasienId,
+          userId: req.pasienId,
         },
         include: [
           {
             model: Pasiens,
-            attributes: ["uuid", "nama", "nobpjs"], // tambahkan atribut yang Anda perlukan dari model Pasiens
+            attributes: ["id", "nama", "nobpjs"],
           },
         ],
       });
@@ -93,16 +94,9 @@ export const getPengajuanById = async (req, res) => {
 };
 
 export const createPengajuan = async (req, res) => {
-  const {
-    politujuan,
-    perawatan,
-    jeniskunjungan,
-    keluhan,
-    anamnesia,
-    tanggalKunjungan,
-  } = req.body;
+  const { politujuan, perawatan, jeniskunjungan, keluhan, pasienId } = req.body;
 
-  if (!politujuan || !perawatan || !jeniskunjungan || !keluhan) {
+  if (!politujuan || !perawatan || !jeniskunjungan || !keluhan || !pasienId) {
     return res.status(400).json({ msg: "Semua kolom harus diisi!" });
   }
 
@@ -112,9 +106,7 @@ export const createPengajuan = async (req, res) => {
       perawatan: perawatan,
       jeniskunjungan: jeniskunjungan,
       keluhan: keluhan,
-      anamnesia: anamnesia,
-      tanggalKunjungan: tanggalKunjungan,
-      pasienId: req.pasienId,
+      pasienId: pasienId,
     });
 
     res

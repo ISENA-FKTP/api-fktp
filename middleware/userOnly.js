@@ -1,7 +1,6 @@
 import Users from "../models/UserModel.js";
 
 const checkRole = (roles) => async (req, res, next) => {
-  console.log("Checking role:", roles);
   try {
     const user = await Users.findOne({
       where: {

@@ -13,7 +13,7 @@ const router = express.Router();
 
 router.get("/obats", verifyPasien, getObats);
 router.get("/obats/:id", verifyPasien, getObatById);
-router.post("/obats", verifyPasien, dokterOnly, createObat);
+router.post("/obats", dokterOnly, createObat);
 router.patch("/obats/:id", verifyPasien, dokterOnly, updateObat);
 router.delete("/obats/:id", verifyPasien, dokterOnly, deleteObat);
 

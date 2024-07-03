@@ -3,9 +3,10 @@ import Pasiens from "../../../../models//pasien/PasienModel.js";
 import { Op } from "sequelize";
 
 export const getTDs = async (req, res) => {
+  console.log("Ini Data: ", req);
   try {
     let response;
-    if (req.role === "pasien") {
+    if (req.role === "admin" || req.role === "dokter") {
       response = await TDs.findAll({
         attributes: [
           "uuid",
@@ -53,14 +54,14 @@ export const getTDById = async (req, res) => {
   try {
     const td = await TDs.findOne({
       where: {
-        uuid: req.params.id,
+        pasienId: req.params.id,
       },
     });
 
     if (!td) return res.status(404).json({ msg: "Data not found!" });
 
     let response;
-    if (req.role === "pasien") {
+    if (req.role === "admin" || req.role === "dokter") {
       response = await TDs.findOne({
         where: {
           id: td.id,
@@ -75,7 +76,7 @@ export const getTDById = async (req, res) => {
     } else {
       response = await TDs.findOne({
         where: {
-          [Op.and]: [{ id: td.id }, { pasienId: req.pasienId }],
+          [Op.and]: [{ id: td.id }, { pasienId: req.params.id }],
         },
         include: [
           {
@@ -93,9 +94,9 @@ export const getTDById = async (req, res) => {
 };
 
 export const createTD = async (req, res) => {
-  const { sistole, distole, respiratory, heartrate } = req.body;
+  const { sistole, distole, respiratory, heartrate, pasienId } = req.body;
 
-  if (!sistole || !distole || !respiratory || !heartrate) {
+  if (!sistole || !distole || !respiratory || !heartrate || !pasienId) {
     return res.status(400).json({ msg: "Semua kolom harus diisi!" });
   }
 
@@ -105,7 +106,7 @@ export const createTD = async (req, res) => {
       distole: distole,
       respiratory: respiratory,
       heartrate: heartrate,
-      pasienId: req.pasienId,
+      pasienId: pasienId,
     });
 
     res

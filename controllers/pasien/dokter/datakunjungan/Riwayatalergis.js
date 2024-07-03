@@ -77,14 +77,14 @@ export const getRAById = async (req, res) => {
 };
 
 export const createRA = async (req, res) => {
-  const { makanan, udara, obatan, prognasa } = req.body;
+  const { makanan, udara, obatan, prognosa, pasienId } = req.body;
   try {
     const riwayatalergi = await RAs.create({
       makanan: makanan,
       udara: udara,
       obatan: obatan,
-      prognasa: prognasa,
-      pasienId: req.pasienId,
+      prognosa: prognosa,
+      pasienId: pasienId,
     });
 
     res

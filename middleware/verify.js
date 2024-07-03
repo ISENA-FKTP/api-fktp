@@ -4,9 +4,6 @@ import Pegawais from "../models/pegawai/PegawaiModel.js";
 import jwt from "jsonwebtoken";
 
 export const verifyUser = async (req, res, next) => {
-  console.log("Verifying user with UUID:", req.userId);
-  console.log("User Role:", req.role);
-
   if (!req.userId) {
     return res.status(401).json({ msg: "Please login in your account!" });
   }
@@ -55,7 +52,6 @@ export const verifyToken = (req, res, next) => {
 export const verifyPasien = async (req, res, next) => {
   try {
     const pasienId = req.userDbId;
-    console.log("Pasien ID:", pasienId);
     if (!pasienId) {
       return res.status(401).json({ msg: "Mohon masukkan data pasien" });
     }

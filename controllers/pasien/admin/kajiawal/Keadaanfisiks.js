@@ -5,7 +5,7 @@ import { Op } from "sequelize";
 export const getKFs = async (req, res) => {
   try {
     let response;
-    if (req.role === "pasien") {
+    if (req.role === "admin" || req.role === "dokter") {
       response = await KFs.findAll({
         attributes: [
           "uuid",
@@ -53,14 +53,14 @@ export const getKFById = async (req, res) => {
   try {
     const kf = await KFs.findOne({
       where: {
-        uuid: req.params.id,
+        pasienId: req.params.id,
       },
     });
 
     if (!kf) return res.status(404).json({ msg: "Data not found!" });
 
     let response;
-    if (req.role === "pasien") {
+    if (req.role === "admin" || req.role === "dokter") {
       response = await KFs.findOne({
         where: {
           id: kf.id,
@@ -75,7 +75,7 @@ export const getKFById = async (req, res) => {
     } else {
       response = await KFs.findOne({
         where: {
-          [Op.and]: [{ id: kf.id }, { pasienId: req.pasienId }],
+          [Op.and]: [{ id: kf.id }, { pasienId: req.params.id }],
         },
         include: [
           {
@@ -93,8 +93,8 @@ export const getKFById = async (req, res) => {
 };
 
 export const createKF = async (req, res) => {
-  const { beratbadan, tinggibadan, lingkarperut, imtBBTB } = req.body;
-  if (!beratbadan || !tinggibadan || !lingkarperut || !imtBBTB) {
+  const { beratbadan, tinggibadan, lingkarperut, imtBBTB, pasienId } = req.body;
+  if (!beratbadan || !tinggibadan || !lingkarperut || !imtBBTB || !pasienId) {
     return res.status(400).json({ msg: "Semua kolom harus diisi!" });
   }
   try {
@@ -103,7 +103,7 @@ export const createKF = async (req, res) => {
       tinggibadan: tinggibadan,
       lingkarperut: lingkarperut,
       imtBBTB: imtBBTB,
-      pasienId: req.pasienId,
+      pasienId: pasienId,
     });
 
     res

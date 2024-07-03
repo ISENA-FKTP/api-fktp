@@ -12,6 +12,7 @@ import { klinikOnly } from "../../../../middleware/userOnly.js";
 const router = express.Router();
 
 router.get("/tds", verifyPasien, getTDs);
+router.get("/tdsDokter/:id", klinikOnly, getTDById);
 router.get("/tds/:id", verifyPasien, getTDById);
 router.post("/tds", verifyPasien, klinikOnly, createTD);
 router.patch("/tds/:id", verifyPasien, klinikOnly, updateTD);

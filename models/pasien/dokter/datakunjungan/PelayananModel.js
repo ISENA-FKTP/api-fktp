@@ -3,7 +3,6 @@ import db from "../../../../config/Database.js";
 import Pasiens from "../../PasienModel.js";
 
 const { DataTypes } = Sequelize;
-
 const Pelayanans = db.define(
   "pelayanans",
   {
@@ -50,7 +49,7 @@ const Pelayanans = db.define(
         notEmpty: true,
       },
     },
-    anastesi: {
+    anestesi: {
       type: DataTypes.STRING,
       allowNull: false,
       validate: {

@@ -84,6 +84,7 @@ export const createPelayanan = async (req, res) => {
     tanggalkunjungan,
     keluhan,
     anestesi,
+    pasienId,
   } = req.body;
   try {
     const pelayanan = await Pelayanans.create({
@@ -93,7 +94,7 @@ export const createPelayanan = async (req, res) => {
       tanggalkunjungan: tanggalkunjungan,
       keluhan: keluhan,
       anestesi: anestesi,
-      pasienId: req.pasienId,
+      pasienId: pasienId,
     });
 
     res

@@ -12,7 +12,6 @@ export const refreshToken = async (req, res) => {
 
     const token = refreshToken.replace("Bearer ", "");
 
-    // Verifikasi refresh token
     jwt.verify(
       token,
       process.env.REFRESH_TOKEN_SECRET,
@@ -22,7 +21,6 @@ export const refreshToken = async (req, res) => {
           return res.sendStatus(403);
         }
 
-        // Refresh token valid, continue to generate new access token
         const user = await Users.findOne({
           where: {
             jwt_token: token,
@@ -36,7 +34,6 @@ export const refreshToken = async (req, res) => {
 
         const { uuid, username, email, satuankerja, role } = user;
 
-        // Generate new access token
         const newAccessToken = jwt.sign(
           { uuid, username, email, satuankerja, role },
           process.env.ACCESS_TOKEN_SECRET,
@@ -45,7 +42,6 @@ export const refreshToken = async (req, res) => {
           }
         );
 
-        // Send new access token back to the client
         res.json({ accessToken: newAccessToken });
       }
     );

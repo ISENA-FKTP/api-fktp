@@ -77,17 +77,22 @@ export const getObatById = async (req, res) => {
 };
 
 export const createObat = async (req, res) => {
-  const { jenisobat1, jenisobat2, jenisobat3, jenisobat4, jenisobat5, BMHP } =
-    req.body;
+  const { jenisobat, dosis, BMHP, pasienId } = req.body;
+
+  const processedJenisObat = jenisobat.map((item) =>
+    item.trim() === "" ? null : item
+  );
+
   try {
     const itemobat = await Obats.create({
-      jenisobat1: jenisobat1,
-      jenisobat2: jenisobat2,
-      jenisobat3: jenisobat3,
-      jenisobat4: jenisobat4,
-      jenisobat5: jenisobat5,
+      jenisobat1: processedJenisObat[0],
+      jenisobat2: processedJenisObat[1],
+      jenisobat3: processedJenisObat[2],
+      jenisobat4: processedJenisObat[3],
+      jenisobat5: processedJenisObat[4],
+      dosis: dosis,
       BMHP: BMHP,
-      pasienId: req.pasienId,
+      pasienId: pasienId,
     });
 
     res.status(201).json({ msg: "Data Obat Berhasil Ditambahkan", itemobat });
