@@ -20,7 +20,7 @@ router.get(
   pegawaiOnly,
   getDatasakitByPegawaiId
 );
-router.post("/datasakits", pegawaiOnly, createDatasakit);
+router.post("/datasakits", verifyPegawai, pegawaiOnly, createDatasakit);
 router.patch("/datasakits/:id", verifyPegawai, pegawaiOnly, updateDatasakit);
 router.delete("/datasakits/:id", verifyPegawai, pegawaiOnly, deleteDatasakit);
 

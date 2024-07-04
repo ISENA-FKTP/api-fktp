@@ -130,7 +130,6 @@ export const getPegawaiByNoNRP = async (req, res) => {
 };
 
 export const createPegawai = async (req, res) => {
-  console.log("req.body:", req.body);
   const { namapegawai, nrp, pangkat, satuankerja } = req.body;
   try {
     await Pegawais.create({
