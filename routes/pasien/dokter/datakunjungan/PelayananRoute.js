@@ -12,7 +12,7 @@ import { dokterOnly } from "../../../../middleware/userOnly.js";
 const router = express.Router();
 
 router.get("/pelayanans", verifyPasien, getPelayanans);
-router.get("/pelayanans/:id", verifyPasien, getPelayananById);
+router.get("/pelayanans/:id", dokterOnly, getPelayananById);
 router.post("/pelayanans", dokterOnly, createPelayanan);
 router.patch("/pelayanans/:id", verifyPasien, dokterOnly, updatePelayanan);
 router.delete("/pelayanans/:id", verifyPasien, dokterOnly, deletePelayanan);

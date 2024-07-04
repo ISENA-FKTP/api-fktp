@@ -3,7 +3,6 @@ import Pasiens from "../../../../models//pasien/PasienModel.js";
 import { Op } from "sequelize";
 
 export const getPengajuans = async (req, res) => {
-  console.log(req);
   try {
     let response;
     if (req.role === "dokter" || req.role === "admin") {

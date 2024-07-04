@@ -37,14 +37,14 @@ export const getPelayananById = async (req, res) => {
   try {
     const pelayanan = await Pelayanans.findOne({
       where: {
-        uuid: req.params.id,
+        pasienId: req.params.id,
       },
     });
 
     if (!pelayanan) return res.status(404).json({ msg: "Data not found!" });
 
     let response;
-    if (req.role === "pasien") {
+    if (req.role === "admin" || req.role === "dokter") {
       response = await Pelayanans.findOne({
         where: {
           id: pelayanan.id,
