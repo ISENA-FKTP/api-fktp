@@ -1,3 +1,4 @@
+import { response } from "express";
 import Dataobats from "../../models/apotek/DataobatModel.js";
 import DeletedDataobats from "../../models/apotek/DeletedataobatModel.js";
 import Users from "../../models/UserModel.js";
@@ -121,7 +122,6 @@ export const getDataobatById = async (req, res) => {
 };
 
 export const createDataobat = async (req, res) => {
-  console.log("Membuat Data Obat baru...", req.body);
   const {
     namaobat,
     jumlahobat,
@@ -132,19 +132,6 @@ export const createDataobat = async (req, res) => {
     hargaobat,
     kategori,
   } = req.body;
-  const role = "obat";
-
-  console.log("Data yang diterima:", {
-    namaobat,
-    jumlahobat,
-    tglmasuk,
-    tglkadaluarsa,
-    nobatch,
-    jenisobat,
-    hargaobat,
-    kategori,
-    role,
-  });
 
   if (
     !namaobat ||
@@ -154,8 +141,7 @@ export const createDataobat = async (req, res) => {
     !nobatch ||
     !jenisobat ||
     !hargaobat ||
-    !kategori ||
-    !role
+    !kategori
   ) {
     return res.status(400).json({ msg: "Semua kolom harus diisi!" });
   }
@@ -170,12 +156,11 @@ export const createDataobat = async (req, res) => {
       jenisobat: jenisobat,
       hargaobat: hargaobat,
       kategori: kategori,
-      role: role,
-      userId: req.userId,
+      role: req.role,
+      userId: req.userDbId,
     });
     res.status(201).json({
       msg: "Data Obat Berhasil Dimasukan!",
-      userId: dataobat.id,
     });
   } catch (error) {
     console.error("Error menambahkan Data Obat:", error.message);
@@ -203,11 +188,9 @@ export const updateDataobat = async (req, res) => {
       kategori,
     } = req.body;
 
-    // Jika jumlahobat dikurangi, simpan perubahan ke DeletedDataobats
-    const hasilpenguranganjumlah = jumlahobat;
     await DeletedDataobats.create({
       namaobat: itemobat.namaobat,
-      jumlahobat: hasilpenguranganjumlah,
+      jumlahobat: itemobat.jumlahobat,
       tglmasuk: itemobat.tglmasuk,
       tglkadaluarsa: itemobat.tglkadaluarsa,
       nobatch: itemobat.nobatch,
@@ -218,13 +201,11 @@ export const updateDataobat = async (req, res) => {
       deletedAt: new Date(),
     });
 
-    const updatedJumlahobat = itemobat.jumlahobat - jumlahobat;
-
     if (req.role === "apoteker") {
       await Dataobats.update(
         {
           namaobat,
-          jumlahobat: updatedJumlahobat,
+          jumlahobat,
           tglmasuk,
           tglkadaluarsa,
           nobatch,
@@ -244,7 +225,7 @@ export const updateDataobat = async (req, res) => {
       await Dataobats.update(
         {
           namaobat,
-          jumlahobat: updatedJumlahobat,
+          jumlahobat,
           tglmasuk,
           tglkadaluarsa,
           nobatch,
@@ -266,6 +247,83 @@ export const updateDataobat = async (req, res) => {
   }
 };
 
+export const tambahKurangDataObats = async (req, res) => {
+  try {
+    const { uuid } = req.params;
+    const itemobat = await Dataobats.findOne({
+      where: { uuid },
+    });
+    if (!itemobat) {
+      return res.status(404).json({ msg: "Data Obat Tidak Ditemukan!" });
+    }
+
+    const currentObat = req.body.jumlahobats;
+
+    if (typeof currentObat !== "number") {
+      return res.status(400).json({ msg: "Jumlah obat harus berupa angka" });
+    }
+    let updatedJumlahobat;
+    console.log("Body request:", req.body.status);
+
+    if (req.body.status === "Tambah") {
+      updatedJumlahobat = itemobat.dataValues.jumlahobat + currentObat;
+    } else if (req.body.status === "Kurangi") {
+      updatedJumlahobat = itemobat.dataValues.jumlahobat - currentObat;
+      if (updatedJumlahobat < 0) updatedJumlahobat = 0;
+    } else {
+      return res.status(400).json({ msg: "Status tidak valid" });
+    }
+
+    if (req.role === "apoteker") {
+      console.log(
+        "Updating data for apoteker with UUID:",
+        itemobat.dataValues.uuid
+      );
+      const result = await Dataobats.update(
+        { jumlahobat: updatedJumlahobat },
+        { where: { uuid: itemobat.dataValues.uuid } }
+      );
+      if (result[0] === 0) {
+        console.error(
+          "No rows updated. UUID may not match:",
+          itemobat.dataValues.uuid
+        );
+      } else {
+        console.log("Data updated successfully:");
+      }
+    } else {
+      if (req.userId !== itemobat.userId) {
+        return res.status(403).json({ msg: "Access Denied" });
+      }
+      console.log(
+        "Updating data for user with UUID:",
+        itemobat.uuid,
+        "and userId:",
+        req.userId
+      );
+      const result = await Dataobats.update(
+        { jumlahobat: updatedJumlahobat },
+        {
+          where: {
+            [Op.and]: [{ uuid: itemobat.uuid }, { userId: req.userId }],
+          },
+        }
+      );
+      if (result[0] === 0) {
+        console.error(
+          "No rows updated. UUID or userId may not match:",
+          itemobat.uuid,
+          req.userId
+        );
+      }
+    }
+
+    res.status(200).json({ msg: "Data Obat berhasil diperbarui!" });
+  } catch (error) {
+    res.status(500).json({ msg: error.message });
+  }
+};
+
 export const deleteDataobat = async (req, res) => {
   try {
     const itemobat = await Dataobats.findOne({
@@ -275,7 +333,6 @@ export const deleteDataobat = async (req, res) => {
     });
     if (!itemobat) return res.status(404).json({ msg: "Data not found!" });
 
-    // Simpan data yang dihapus ke dalam DeletedDataobats
     await DeletedDataobats.create({
       namaobat: itemobat.namaobat,
       jumlahobat: itemobat.jumlahobat,

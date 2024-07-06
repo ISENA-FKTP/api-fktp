@@ -5,16 +5,21 @@ import {
   createDataobat,
   updateDataobat,
   deleteDataobat,
+  tambahKurangDataObats,
 } from "../../controllers/apotek/Dataobats.js";
-import { verifyUser } from "../../middleware/verify.js";
 import { apotekerOnly } from "../../middleware/userOnly.js";
 
 const router = express.Router();
 
-router.get("/dataobats", verifyUser, getDataobats);
-router.get("/dataobats/:id", verifyUser, getDataobatById);
-router.post("/dataobats", verifyUser, apotekerOnly, createDataobat);
-router.patch("/dataobats/:id", verifyUser, apotekerOnly, updateDataobat);
-router.delete("/dataobats/:id", verifyUser, apotekerOnly, deleteDataobat);
+router.get("/dataobats", apotekerOnly, getDataobats);
+router.get("/dataobats/:id", apotekerOnly, getDataobatById);
+router.post("/dataobats", apotekerOnly, createDataobat);
+router.patch("/dataobats/:id", apotekerOnly, updateDataobat);
+router.patch(
+  "/dataobats/tambahkurangobats/:uuid",
+  apotekerOnly,
+  tambahKurangDataObats
+);
+router.delete("/dataobats/:id", apotekerOnly, deleteDataobat);
 
 export default router;
