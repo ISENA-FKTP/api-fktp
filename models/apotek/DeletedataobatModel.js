@@ -32,6 +32,11 @@ const Deletedataobats = db.define(
       type: DataTypes.DATE,
       allowNull: false,
     },
+    tanggalPengeluaran: {
+      type: DataTypes.DATE,
+      allowNull: false,
+      defaultValue: DataTypes.NOW,
+    },
     nobatch: {
       type: DataTypes.STRING,
       allowNull: false,
@@ -63,7 +68,6 @@ const Deletedataobats = db.define(
   }
 );
 
-// Define relation with Users model
 Deletedataobats.belongsTo(Users, { foreignKey: "userId" });
 Users.hasMany(Deletedataobats, { foreignKey: "userId" });
 

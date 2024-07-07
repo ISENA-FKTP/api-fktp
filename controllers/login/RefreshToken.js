@@ -2,6 +2,7 @@ import Users from "../../models/UserModel.js";
 import jwt from "jsonwebtoken";
 
 export const refreshToken = async (req, res) => {
+  console.log("refresh token called:", req.headers["authorization"]);
   try {
     const refreshToken = req.headers["authorization"];
 

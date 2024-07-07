@@ -57,7 +57,6 @@ const Obats = db.define(
         notEmpty: true,
       },
     },
-
     BMHP: {
       type: DataTypes.STRING,
       allowNull: false,
@@ -67,7 +66,15 @@ const Obats = db.define(
     },
     pasienId: {
       type: DataTypes.INTEGER,
+      allowNull: false,
+      validate: {
+        notEmpty: true,
+      },
+    },
+    status: {
+      type: DataTypes.BOOLEAN,
       allowNull: true,
+      defaultValue: false,
       validate: {
         notEmpty: true,
       },

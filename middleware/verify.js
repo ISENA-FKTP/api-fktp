@@ -37,7 +37,6 @@ export const verifyToken = (req, res, next) => {
 
   jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, decoded) => {
     if (err) {
-      console.log("Gagal memverifikasi token:", err);
       return res.status(403).json({ message: "Gagal memverifikasi token" });
     }
 

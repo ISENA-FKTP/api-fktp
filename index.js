@@ -6,7 +6,7 @@ import helmet from "helmet";
 
 import UserRoute from "./routes/UserRoute.js";
 import AuthRoute from "./routes//login/AuthRoute.js";
-import TokenRoute from "./routes//login/AuthRoute.js";
+import TokenRoute from "./routes//login/TokenRoute.js"; // Perbarui import ini
 
 import PasienRoute from "./routes/pasien/PasienRoute.js";
 import AuthPasienRoute from "./routes/pasien/AuthPasienRoute.js";
@@ -41,7 +41,6 @@ const app = express();
 app.use(
   cors({
     credentials: true,
-    // origin: "https://isena-fktp.vercel.app",
     origin: "http://localhost:5173",
   })
 );
@@ -63,13 +62,15 @@ app.use(express.json());
   await db.sync();
 })();
 
-// 5. Use routes - make sure this comes after the middleware setup
+// 5. Define unprotected routes
 app.use(AuthRoute);
 app.use(TokenRoute);
+
+// 6. Apply middleware verification
 app.use(verifyToken);
 app.use(verifyUser);
 
-// Protected routes
+// 7. Define protected routes
 app.use(UserRoute);
 app.use(PasienRoute);
 app.use(AuthPasienRoute);

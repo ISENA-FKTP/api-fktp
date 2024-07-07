@@ -1,8 +1,9 @@
 import { response } from "express";
 import Dataobats from "../../models/apotek/DataobatModel.js";
-import DeletedDataobats from "../../models/apotek/DeletedataobatModel.js";
+import Deletedataobats from "../../models/apotek/DeletedataobatModel.js";
 import Users from "../../models/UserModel.js";
 import { Op } from "sequelize";
+import { v4 as uuidv4 } from "uuid";
 
 export const getDataobats = async (req, res) => {
   try {
@@ -188,7 +189,7 @@ export const updateDataobat = async (req, res) => {
       kategori,
     } = req.body;
 
-    await DeletedDataobats.create({
+    await Deletedataobats.create({
       namaobat: itemobat.namaobat,
       jumlahobat: itemobat.jumlahobat,
       tglmasuk: itemobat.tglmasuk,
@@ -250,72 +251,48 @@ export const updateDataobat = async (req, res) => {
 export const tambahKurangDataObats = async (req, res) => {
   try {
     const { uuid } = req.params;
-    const itemobat = await Dataobats.findOne({
-      where: { uuid },
-    });
+    const itemobat = await Dataobats.findOne({ where: { uuid } });
+
     if (!itemobat) {
       return res.status(404).json({ msg: "Data Obat Tidak Ditemukan!" });
     }
 
     const currentObat = req.body.jumlahobats;
-
     if (typeof currentObat !== "number") {
       return res.status(400).json({ msg: "Jumlah obat harus berupa angka" });
     }
-    let updatedJumlahobat;
-    console.log("Body request:", req.body.status);
 
+    let updatedJumlahobat;
     if (req.body.status === "Tambah") {
-      updatedJumlahobat = itemobat.dataValues.jumlahobat + currentObat;
+      updatedJumlahobat = itemobat.jumlahobat + currentObat;
     } else if (req.body.status === "Kurangi") {
-      updatedJumlahobat = itemobat.dataValues.jumlahobat - currentObat;
+      updatedJumlahobat = itemobat.jumlahobat - currentObat;
       if (updatedJumlahobat < 0) updatedJumlahobat = 0;
+
+      await Deletedataobats.create({
+        uuid: uuidv4(),
+        namaobat: itemobat.namaobat,
+        jumlahobat: currentObat,
+        tglmasuk: itemobat.tglmasuk,
+        tglkadaluarsa: itemobat.tglkadaluarsa,
+        nobatch: itemobat.nobatch,
+        jenisobat: itemobat.jenisobat,
+        hargaobat: itemobat.hargaobat,
+        kategori: itemobat.kategori,
+        userId: itemobat.userId,
+        tanggalPengeluaran: new Date(),
+      });
     } else {
       return res.status(400).json({ msg: "Status tidak valid" });
     }
 
-    if (req.role === "apoteker") {
-      console.log(
-        "Updating data for apoteker with UUID:",
-        itemobat.dataValues.uuid
-      );
-      const result = await Dataobats.update(
-        { jumlahobat: updatedJumlahobat },
-        { where: { uuid: itemobat.dataValues.uuid } }
-      );
-      if (result[0] === 0) {
-        console.error(
-          "No rows updated. UUID may not match:",
-          itemobat.dataValues.uuid
-        );
-      } else {
-        console.log("Data updated successfully:");
-      }
-    } else {
-      if (req.userId !== itemobat.userId) {
-        return res.status(403).json({ msg: "Access Denied" });
-      }
-      console.log(
-        "Updating data for user with UUID:",
-        itemobat.uuid,
-        "and userId:",
-        req.userId
-      );
-      const result = await Dataobats.update(
-        { jumlahobat: updatedJumlahobat },
-        {
-          where: {
-            [Op.and]: [{ uuid: itemobat.uuid }, { userId: req.userId }],
-          },
-        }
-      );
-      if (result[0] === 0) {
-        console.error(
-          "No rows updated. UUID or userId may not match:",
-          itemobat.uuid,
-          req.userId
-        );
-      }
+    const result = await Dataobats.update(
+      { jumlahobat: updatedJumlahobat },
+      { where: { uuid: itemobat.uuid } }
+    );
+
+    if (result[0] === 0) {
+      return res.status(404).json({ msg: "Tidak dapat memperbarui data obat" });
     }
 
     res.status(200).json({ msg: "Data Obat berhasil diperbarui!" });
@@ -333,7 +310,7 @@ export const deleteDataobat = async (req, res) => {
     });
     if (!itemobat) return res.status(404).json({ msg: "Data not found!" });
 
-    await DeletedDataobats.create({
+    await Deletedataobats.create({
       namaobat: itemobat.namaobat,
       jumlahobat: itemobat.jumlahobat,
       tglmasuk: itemobat.tglmasuk,

@@ -1,5 +1,6 @@
 import Deletedataobats from "../../models/apotek/DeletedataobatModel.js";
 import Users from "../../models/UserModel.js";
+import Dataobats from "../../models/apotek/DataobatModel.js";
 
 export const getDeletedataobats = async (req, res) => {
   try {
@@ -16,8 +17,10 @@ export const getDeletedataobats = async (req, res) => {
           "hargaobat",
           "kategori",
           "userId",
+          "tanggalPengeluaran",
           "deletedAt",
         ],
+
         include: [
           {
             model: Users,
@@ -37,6 +40,7 @@ export const getDeletedataobats = async (req, res) => {
           "hargaobat",
           "kategori",
           "userId",
+          "tanggalPengeluaran",
           "deletedAt",
         ],
         where: {

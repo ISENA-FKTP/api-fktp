@@ -5,7 +5,7 @@ import { Op } from "sequelize";
 export const getObats = async (req, res) => {
   try {
     let response;
-    if (req.role === "pasien") {
+    if (req.role === "dokter" || req.role === "admin") {
       response = await Obats.findAll({
         include: [
           {
@@ -44,7 +44,7 @@ export const getObatById = async (req, res) => {
     if (!itemobat) return res.status(404).json({ msg: "Data not found!" });
 
     let response;
-    if (req.role === "pasien") {
+    if (req.role === "dokter" || req.role === "admin") {
       response = await Obats.findOne({
         where: {
           id: itemobat.id,
@@ -60,6 +60,58 @@ export const getObatById = async (req, res) => {
       response = await Obats.findOne({
         where: {
           [Op.and]: [{ id: itemobat.id }, { pasienId: req.pasienId }],
+        },
+        include: [
+          {
+            model: Pasiens,
+            attributes: ["uuid", "nama", "nobpjs"],
+          },
+        ],
+      });
+    }
+
+    res.status(200).json(response);
+  } catch (error) {
+    res.status(500).json({ msg: error.message });
+  }
+};
+
+export const getObatByStatus = async (req, res) => {
+  try {
+    const itemobat = await Obats.findAll({
+      where: {
+        status: req.params.status,
+      },
+    });
+
+    if (!itemobat || itemobat.length === 0) {
+      return res.status(404).json({ msg: "Data not found!" });
+    }
+
+    const ids = itemobat.map((obat) => obat.dataValues.id); // Mengambil semua ID dari itemobat
+
+    let response;
+    if (req.role === "dokter" || req.role === "apoteker") {
+      response = await Obats.findAll({
+        where: {
+          id: {
+            [Op.in]: ids, // Menggunakan operator Op.in untuk mencari semua ID yang cocok
+          },
+        },
+        include: [
+          {
+            model: Pasiens,
+            attributes: ["uuid", "nama", "nobpjs"],
+          },
+        ],
+      });
+    } else {
+      response = await Obats.findAll({
+        where: {
+          [Op.and]: [
+            { id: { [Op.in]: ids } }, // Menggunakan operator Op.in untuk mencari semua ID yang cocok
+            { pasienId: req.dataValues.pasienId },
+          ],
         },
         include: [
           {
@@ -92,6 +144,7 @@ export const createObat = async (req, res) => {
       jenisobat5: processedJenisObat[4],
       dosis: dosis,
       BMHP: BMHP,
+      status: false,
       pasienId: pasienId,
     });
 
@@ -117,6 +170,7 @@ export const updateObat = async (req, res) => {
       "jenisobat4",
       "jenisobat5",
       "BMHP",
+      "status",
     ];
     const updateFields = {};
     Object.keys(req.body).forEach((key) => {
@@ -145,9 +199,16 @@ export const deleteObat = async (req, res) => {
       },
     });
     if (!itemobat) return res.status(404).json({ msg: "Data not found!" });
-    const { jenisobat1, jenisobat2, jenisobat3, jenisobat4, jenisobat5, BMHP } =
-      req.body;
-    if (req.role === "pasien") {
+    const {
+      jenisobat1,
+      jenisobat2,
+      jenisobat3,
+      jenisobat4,
+      jenisobat5,
+      BMHP,
+      status,
+    } = req.body;
+    if (req.role === "dokter" || req.role === "admin") {
       await Obats.destroy({
         where: {
           id: itemobat.id,
