@@ -30,7 +30,7 @@ const Homevisits = db.define(
       },
     },
     diagnosa: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.STRING,
       allowNull: false,
       validate: {
         notEmpty: true,

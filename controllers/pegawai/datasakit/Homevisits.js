@@ -1,4 +1,4 @@
-import Datasakits from "../../../models/pegawai/datasakit/DatasakitModel.js";
+import Homevisits from "../../../models/pegawai/datasakit/HomevisitModel.js";
 import Pegawais from "../../../models/pegawai/PegawaiModel.js";
 import { Op } from "sequelize";
 
@@ -20,7 +20,7 @@ export const getHomevisits = async (req, res) => {
         include: [
           {
             model: Pegawais,
-            attributes: ["namapegawai", "nrp"],
+            attributes: ["namapegawai", "nrp", "satuankerja", "pangkat"],
           },
         ],
       });
@@ -42,7 +42,7 @@ export const getHomevisits = async (req, res) => {
         include: [
           {
             model: Pegawais,
-            attributes: ["namapegawai", "nrp"],
+            attributes: ["namapegawai", "nrp", "satuankerja", "pangkat"],
           },
         ],
       });
@@ -113,6 +113,93 @@ export const getHomevisitById = async (req, res) => {
   }
 };
 
+export const getHomevisitByPegawaiId = async (req, res) => {
+  try {
+    const homevisitList = await Homevisits.findAll({
+      where: {
+        pegawaiId: req.params.id,
+      },
+      include: [
+        {
+          model: Pegawais,
+          attributes: ["uuid", "namapegawai", "nrp", "satuankerja", "pangkat"],
+        },
+      ],
+    });
+
+    if (!homevisitList.length)
+      return res.status(404).json({ msg: "Data not found!" });
+
+    let response;
+    if (req.role === "pegawai") {
+      response = homevisitList.map((homevisit) => {
+        const {
+          uuid,
+          keluhan,
+          pemeriksaanfisik,
+          diagnosa,
+          terapi,
+          saranmedis,
+          fotodokumentasi,
+          createdAt,
+          pegawai,
+        } = homevisit.dataValues;
+
+        return {
+          uuid,
+          keluhan,
+          pemeriksaanfisik,
+          diagnosa,
+          terapi,
+          saranmedis,
+          fotodokumentasi,
+          createdAt,
+          Pegawais: {
+            uuid: pegawai.dataValues.uuid,
+            namapegawai: pegawai.dataValues.namapegawai,
+            nrp: pegawai.dataValues.nrp,
+            satuankerja: pegawai.dataValues.satuankerja,
+            pangkat: pegawai.dataValues.pangkat,
+          },
+        };
+      });
+    } else {
+      response = homevisitList.map((homevisit) => {
+        const {
+          uuid,
+          keluhan,
+          pemeriksaanfisik,
+          diagnosa,
+          terapi,
+          saranmedis,
+          fotodokumentasi,
+          createdAt,
+          pegawai,
+        } = homevisit.dataValues;
+
+        return {
+          uuid,
+          keluhan,
+          pemeriksaanfisik,
+          diagnosa,
+          terapi,
+          saranmedis,
+          fotodokumentasi,
+          createdAt,
+          Pegawais: {
+            namapegawai: pegawai.dataValues.namapegawai,
+            nrp: pegawai.dataValues.nrp,
+          },
+        };
+      });
+    }
+
+    res.status(200).json(response);
+  } catch (error) {
+    res.status(500).json({ msg: error.message });
+  }
+};
+
 export const createHomevisit = async (req, res) => {
   const {
     keluhan,
@@ -121,6 +208,7 @@ export const createHomevisit = async (req, res) => {
     terapi,
     saranmedis,
     fotodokumentasi,
+    pegawaiId,
   } = req.body;
   try {
     await Homevisits.create({
@@ -130,7 +218,7 @@ export const createHomevisit = async (req, res) => {
       terapi: terapi,
       saranmedis: saranmedis,
       fotodokumentasi: fotodokumentasi,
-      pegawaiId: req.pegawaiId,
+      pegawaiId: pegawaiId,
     });
     res
       .status(201)

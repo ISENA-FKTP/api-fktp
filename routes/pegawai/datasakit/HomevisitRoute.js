@@ -13,6 +13,12 @@ const router = express.Router();
 
 router.get("/homevisits", verifyPegawai, getHomevisits);
 router.get("/homevisits/:id", verifyPegawai, pegawaiOnly, getHomevisitById);
+router.get(
+  "/homevisits/pegawai/:id",
+  verifyPegawai,
+  pegawaiOnly,
+  getHomevisitById
+);
 router.post("/homevisits", verifyPegawai, pegawaiOnly, createHomevisit);
 router.patch("/homevisits/:id", verifyPegawai, pegawaiOnly, updateHomevisit);
 router.delete("/homevisits/:id", verifyPegawai, pegawaiOnly, deleteHomevisit);

@@ -81,7 +81,6 @@ const Pasiens = db.define(
     approved: {
       type: DataTypes.BOOLEAN,
       defaultValue: false,
-      allowNull: true,
     },
     userId: {
       type: DataTypes.INTEGER,
