@@ -21,6 +21,7 @@ export const getPasiens = async (req, res) => {
           "ppkumum",
           "nohp",
           "norm",
+          "approved",
           "createdAt",
         ],
         include: [
@@ -43,6 +44,7 @@ export const getPasiens = async (req, res) => {
           "ppkumum",
           "nohp",
           "norm",
+          "approved",
           "createdAt",
         ],
         where: {
@@ -88,6 +90,7 @@ export const getPasienById = async (req, res) => {
           "ppkumum",
           "nohp",
           "norm",
+          "approved",
           "createdAt",
         ],
         where: {
@@ -112,6 +115,7 @@ export const getPasienById = async (req, res) => {
           "ppkumum",
           "nohp",
           "norm",
+          "approved",
           "createdAt",
         ],
         where: {
@@ -188,6 +192,7 @@ export const createPasien = async (req, res) => {
       norm: norm,
       role: role,
       userId: req.userDbId,
+      approved: false,
     });
 
     res.status(201).json({
@@ -209,7 +214,7 @@ export const updatePasien = async (req, res) => {
   try {
     const pasien = await Pasiens.findOne({
       where: {
-        uuid: req.params.id,
+        id: req.params.id,
       },
     });
     if (!pasien) return res.status(404).json({ msg: "Data not found!" });
@@ -222,10 +227,21 @@ export const updatePasien = async (req, res) => {
       ppkumum,
       nohp,
       norm,
+      approved,
     } = req.body;
-    if (req.role === "admin") {
+    if (req.role === "admin" || req.role === "dokter") {
       await Pasiens.update(
-        { nobpjs, nama, statuspeserta, tgllahir, gender, ppkumum, nohp, norm },
+        {
+          nobpjs,
+          nama,
+          statuspeserta,
+          tgllahir,
+          gender,
+          ppkumum,
+          nohp,
+          norm,
+          approved,
+        },
         {
           where: {
             id: pasien.id,
@@ -234,7 +250,7 @@ export const updatePasien = async (req, res) => {
       );
     } else {
       if (req.userId !== pasien.userId)
-        return res.status(403).json({ msg: "Access X" });
+        return res.status(403).json({ msg: "Access Denied!" });
       await Pasiens.update(
         { nobpjs, nama, statuspeserta, tgllahir, gender, ppkumum, nohp, norm },
         {
@@ -267,6 +283,7 @@ export const deletePasien = async (req, res) => {
       ppkumum,
       nohp,
       norm,
+      approved,
     } = req.body;
     if (req.role === "admin") {
       await Pasiens.destroy({

@@ -78,6 +78,11 @@ const Pasiens = db.define(
         notEmpty: true,
       },
     },
+    approved: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: false,
+      allowNull: true,
+    },
     userId: {
       type: DataTypes.INTEGER,
       allowNull: false,
