@@ -5,6 +5,7 @@ import {
   createHomevisit,
   updateHomevisit,
   deleteHomevisit,
+  getHomevisitByPegawaiId,
 } from "../../../controllers/pegawai/datasakit/Homevisits.js";
 import { verifyPegawai } from "../../../middleware/verify.js";
 import { pegawaiOnly } from "../../../middleware/userOnly.js";
@@ -17,7 +18,7 @@ router.get(
   "/homevisits/pegawai/:id",
   verifyPegawai,
   pegawaiOnly,
-  getHomevisitById
+  getHomevisitByPegawaiId
 );
 router.post("/homevisits", verifyPegawai, pegawaiOnly, createHomevisit);
 router.patch("/homevisits/:id", verifyPegawai, pegawaiOnly, updateHomevisit);

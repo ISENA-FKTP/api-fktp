@@ -16,6 +16,7 @@ export const getHomevisits = async (req, res) => {
           "saranmedis",
           "fotodokumentasi",
           "createdAt",
+          "pegawaiId",
         ],
         include: [
           {
@@ -35,6 +36,7 @@ export const getHomevisits = async (req, res) => {
           "saranmedis",
           "fotodokumentasi",
           "createdAt",
+          "pegawaiId",
         ],
         where: {
           pegawaiId: req.pegawaiId,
