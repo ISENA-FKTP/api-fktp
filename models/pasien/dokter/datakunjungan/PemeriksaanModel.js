@@ -29,6 +29,13 @@ const Pemeriksaans = db.define(
         notEmpty: true,
       },
     },
+    nrpDokter: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      validate: {
+        notEmpty: true,
+      },
+    },
     pelayanannonmedis: {
       type: DataTypes.STRING,
       allowNull: false,

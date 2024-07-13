@@ -5,7 +5,7 @@ import { Op } from "sequelize";
 export const getPelayanans = async (req, res) => {
   try {
     let response;
-    if (req.role === "pasien") {
+    if (req.role === "dokter" || req.role === "admin") {
       response = await Pelayanans.findAll({
         include: [
           {

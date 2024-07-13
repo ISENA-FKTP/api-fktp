@@ -16,6 +16,13 @@ const TTs = db.define(
       },
     },
     tandatangan: {
+      type: DataTypes.TEXT,
+      allowNull: false,
+      validate: {
+        notEmpty: true,
+      },
+    },
+    nrp: {
       type: DataTypes.STRING,
       allowNull: false,
       validate: {

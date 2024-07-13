@@ -13,6 +13,7 @@ export const getPengajuans = async (req, res) => {
           "perawatan",
           "jeniskunjungan",
           "keluhan",
+          "approved",
           "createdAt",
         ],
         include: [
@@ -30,6 +31,7 @@ export const getPengajuans = async (req, res) => {
           "perawatan",
           "jeniskunjungan",
           "keluhan",
+          "approved",
           "createdAt",
         ],
         where: {
@@ -60,7 +62,7 @@ export const getPengajuanById = async (req, res) => {
     if (!pengajuan) return res.status(404).json({ msg: "Data not found!" });
 
     let response;
-    if (req.role === "pasien") {
+    if (req.role === "admin" || req.role === "dokter") {
       response = await Pengajuans.findOne({
         where: {
           id: pengajuan.id,
@@ -105,6 +107,7 @@ export const createPengajuan = async (req, res) => {
       perawatan: perawatan,
       jeniskunjungan: jeniskunjungan,
       keluhan: keluhan,
+      approved: false,
       pasienId: pasienId,
     });
 
@@ -131,6 +134,7 @@ export const updatePengajuan = async (req, res) => {
       "perawatan",
       "jeniskunjungan",
       "keluhan",
+      "approved",
     ];
 
     const updateFields = {};
@@ -161,7 +165,7 @@ export const deletePengajuan = async (req, res) => {
     });
     if (!pengajuan) return res.status(404).json({ msg: "Data not found!" });
     const { politujuan, perawatan, jeniskunjungan, keluhan } = req.body;
-    if (req.role === "pasien") {
+    if (req.role === "admin" || req.role === "dokter") {
       await Pengajuans.destroy({
         where: {
           id: pengajuan.id,

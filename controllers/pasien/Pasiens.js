@@ -21,7 +21,6 @@ export const getPasiens = async (req, res) => {
           "ppkumum",
           "nohp",
           "norm",
-          "approved",
           "createdAt",
         ],
         include: [
@@ -44,7 +43,6 @@ export const getPasiens = async (req, res) => {
           "ppkumum",
           "nohp",
           "norm",
-          "approved",
           "createdAt",
         ],
         where: {
@@ -90,7 +88,6 @@ export const getPasienById = async (req, res) => {
           "ppkumum",
           "nohp",
           "norm",
-          "approved",
           "createdAt",
         ],
         where: {
@@ -115,7 +112,6 @@ export const getPasienById = async (req, res) => {
           "ppkumum",
           "nohp",
           "norm",
-          "approved",
           "createdAt",
         ],
         where: {
@@ -192,7 +188,6 @@ export const createPasien = async (req, res) => {
       norm: norm,
       role: role,
       userId: req.userDbId,
-      approved: false,
     });
 
     res.status(201).json({
@@ -227,7 +222,6 @@ export const updatePasien = async (req, res) => {
       ppkumum,
       nohp,
       norm,
-      approved,
     } = req.body;
     if (req.role === "admin" || req.role === "dokter") {
       await Pasiens.update(
@@ -240,7 +234,6 @@ export const updatePasien = async (req, res) => {
           ppkumum,
           nohp,
           norm,
-          approved,
         },
         {
           where: {
@@ -283,7 +276,6 @@ export const deletePasien = async (req, res) => {
       ppkumum,
       nohp,
       norm,
-      approved,
     } = req.body;
     if (req.role === "admin") {
       await Pasiens.destroy({

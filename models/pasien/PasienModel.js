@@ -58,14 +58,14 @@ const Pasiens = db.define(
       },
     },
     nohp: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.STRING,
       allowNull: false,
       validate: {
         notEmpty: true,
       },
     },
     norm: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.STRING,
       allowNull: false,
       validate: {
         notEmpty: true,
@@ -77,10 +77,6 @@ const Pasiens = db.define(
       validate: {
         notEmpty: true,
       },
-    },
-    approved: {
-      type: DataTypes.BOOLEAN,
-      defaultValue: false,
     },
     userId: {
       type: DataTypes.INTEGER,

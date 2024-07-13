@@ -5,7 +5,7 @@ import { Op } from "sequelize";
 export const getPemeriksaans = async (req, res) => {
   try {
     let response;
-    if (req.role === "pasien") {
+    if (req.role === "admin" || req.role === "dokter") {
       response = await Pemeriksaans.findAll({
         include: [
           {
@@ -77,12 +77,19 @@ export const getPemeriksaanById = async (req, res) => {
 };
 
 export const createPemeriksaan = async (req, res) => {
-  const { kasusKLL, namadokter, pelayanannonmedis, statuspulang, pasienId } =
-    req.body;
+  const {
+    kasusKLL,
+    namadokter,
+    nrpDokter,
+    pelayanannonmedis,
+    statuspulang,
+    pasienId,
+  } = req.body;
   try {
     const pemeriksaan = await Pemeriksaans.create({
       kasusKLL: kasusKLL,
       namadokter: namadokter,
+      nrpDokter: nrpDokter,
       pelayanannonmedis: pelayanannonmedis,
       statuspulang: statuspulang,
       pasienId: pasienId,
@@ -108,6 +115,7 @@ export const updatePemeriksaan = async (req, res) => {
     const allowedFields = [
       "kasusKLL",
       "namadokter",
+      "nrpDokter",
       "pelayanannonmedis",
       "statuspulang",
     ];
@@ -139,7 +147,6 @@ export const deletePemeriksaan = async (req, res) => {
       },
     });
     if (!pemeriksaan) return res.status(404).json({ msg: "Data not found!" });
-    const { kasusKLL, namadokter, pelayanannonmedis, statuspulang } = req.body;
     if (req.role === "pasien") {
       await Pemeriksaans.destroy({
         where: {

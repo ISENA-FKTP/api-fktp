@@ -12,8 +12,8 @@ import { dokterOnly } from "../../../../middleware/userOnly.js";
 const router = express.Router();
 
 router.get("/tts", verifyPasien, getTTs);
-router.get("/tts/:id", verifyPasien, getTTById);
-router.post("/tts", verifyPasien, dokterOnly, createTT);
+router.get("/tts/:id", dokterOnly, getTTById);
+router.post("/tts", dokterOnly, createTT);
 router.patch("/tts/:id", verifyPasien, dokterOnly, updateTT);
 router.delete("/tts/:id", verifyPasien, dokterOnly, deleteTT);
 

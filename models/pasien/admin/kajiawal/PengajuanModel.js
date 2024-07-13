@@ -43,6 +43,10 @@ const Pengajuans = db.define(
         notEmpty: true,
       },
     },
+    approved: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: false,
+    },
     pasienId: {
       type: DataTypes.INTEGER,
       allowNull: true,

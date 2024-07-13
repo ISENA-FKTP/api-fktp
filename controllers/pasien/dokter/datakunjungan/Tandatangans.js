@@ -37,18 +37,15 @@ export const getTTById = async (req, res) => {
   try {
     const ttd = await TTs.findOne({
       where: {
-        uuid: req.params.id,
+        nrp: req.params.id,
       },
     });
 
     if (!ttd) return res.status(404).json({ msg: "Data not found!" });
 
     let response;
-    if (req.role === "pasien") {
+    if (req.role === "dokter") {
       response = await TTs.findOne({
-        where: {
-          id: riwayatalergi.id,
-        },
         include: [
           {
             model: Pasiens,
@@ -77,11 +74,12 @@ export const getTTById = async (req, res) => {
 };
 
 export const createTT = async (req, res) => {
-  const { tandatangan } = req.body;
+  const { tandatangan, nrpDokter, pasienId } = req.body;
   try {
     const ttd = await TTs.create({
       tandatangan: tandatangan,
-      pasienId: req.pasienId,
+      nrp: nrpDokter,
+      pasienId: pasienId,
     });
 
     res.status(201).json({ msg: "Tanda Tangan Berhasil Ditambahkan", ttd });
