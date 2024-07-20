@@ -77,7 +77,6 @@ export const verifyPasien = async (req, res, next) => {
 export const verifyPegawai = async (req, res, next) => {
   try {
     const pegawaiId = req.userDbId;
-    console.log("Pegawai ID:", pegawaiId);
     if (!pegawaiId) {
       return res.status(401).json({ msg: "Mohon masukkan data pegawai" });
     }
@@ -93,8 +92,6 @@ export const verifyPegawai = async (req, res, next) => {
     }
 
     req.pegawaiId = pegawai.id;
-    console.log("Pegawai ID:", req.pegawaiId);
-
     next();
   } catch (error) {
     return res.status(500).json({ msg: error.message });
