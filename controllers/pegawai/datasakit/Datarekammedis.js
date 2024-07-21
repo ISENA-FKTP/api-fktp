@@ -90,6 +90,51 @@ export const getDatarekammedisById = async (req, res) => {
   }
 };
 
+export const getDatarekammedisByPegawaiId = async (req, res) => {
+  try {
+    const datarekammedis = await Datarekammedis.findAll({
+      where: {
+        pegawaiId: req.params.id,
+      },
+      include: [
+        {
+          model: Pegawais,
+          attributes: ["uuid", "namapegawai", "nrp", "satuankerja", "pangkat"],
+        },
+      ],
+    });
+
+    if (!datarekammedis)
+      return res.status(404).json({ msg: "Data not found!" });
+
+    let response;
+    if (req.role === "pegawai") {
+      response = await Datarekammedis.findAll({
+        attributes: ["uuid", "keterangan", "filerekammedis", "createdAt"],
+        include: [
+          {
+            model: Pegawais,
+            attributes: ["namapegawai", "nrp", "satuankerja", "pangkat"],
+          },
+        ],
+      });
+    } else {
+      response = await Datarekammedis.findAll({
+        attributes: ["uuid", "keterangan", "filerekammedis", "createdAt"],
+        include: [
+          {
+            model: Pegawais,
+            attributes: ["namapegawai", "nrp", "satuankerja", "pangkat"],
+          },
+        ],
+      });
+    }
+    res.status(200).json(response);
+  } catch (error) {
+    res.status(500).json({ msg: error.message });
+  }
+};
+
 export const createDatarekammedis = async (req, res) => {
   const { keterangan, pegawaiId } = req.body;
   const filePath = req.file.path.replace("uploads\\", "");
