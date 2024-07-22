@@ -5,7 +5,11 @@ import Dataobats from "../../models/apotek/DataobatModel.js";
 export const getDeletedataobats = async (req, res) => {
   try {
     let response;
-    if (req.role === "manage" || req.role === "apoteker") {
+    if (
+      req.role === "manage" ||
+      req.role === "apoteker" ||
+      req.role === "kepala bidang"
+    ) {
       response = await Deletedataobats.findAll({
         attributes: [
           "uuid",
