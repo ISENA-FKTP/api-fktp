@@ -6,7 +6,11 @@ import Diagonsas from "../../../../models/pasien/dokter/datakunjungan/DiagnosaMo
 export const getDiagnosas = async (req, res) => {
   try {
     let response;
-    if (req.role === "dokter" || req.role === "admin") {
+    if (
+      req.role === "dokter" ||
+      req.role === "admin" ||
+      req.role === "kepala bidang"
+    ) {
       response = await Diagnosas.findAll({
         include: [
           {

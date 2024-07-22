@@ -7,11 +7,12 @@ import {
   deletePengajuan,
 } from "../../../../controllers/pasien/admin/kajiawal/Pengajuans.js";
 import { verifyPasien } from "../../../../middleware/verify.js";
-import { klinikOnly } from "../../../../middleware/userOnly.js";
+import { klinikOnly, statistikOnly } from "../../../../middleware/userOnly.js";
 
 const router = express.Router();
 
 router.get("/pengajuans", verifyPasien, getPengajuans);
+router.get("/pengajuansStatistik", statistikOnly, getPengajuans);
 router.get("/pengajuansDokter", klinikOnly, getPengajuans);
 router.get("/pengajuans/:id", verifyPasien, getPengajuanById);
 router.post("/pengajuans", verifyPasien, createPengajuan);

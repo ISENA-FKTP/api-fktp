@@ -28,5 +28,5 @@ export const dokterOnly = checkRole(["dokter"]);
 export const adminOnly = checkRole(["admin"]);
 export const apotekerOnly = checkRole(["apoteker"]);
 export const pegawaiOnly = checkRole(["pegawai"]);
-export const statistikOnly = checkRole(["statistik"]);
+export const statistikOnly = checkRole(["kepala bidang"]);
 export const apotekOnly = checkRole(["apoteker", "dokter"]);

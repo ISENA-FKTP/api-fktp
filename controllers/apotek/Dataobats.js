@@ -8,7 +8,11 @@ import { v4 as uuidv4 } from "uuid";
 export const getDataobats = async (req, res) => {
   try {
     let response;
-    if (req.role === "dokter" || req.role === "apoteker") {
+    if (
+      req.role === "dokter" ||
+      req.role === "apoteker" ||
+      req.role === "kepala bidang"
+    ) {
       response = await Dataobats.findAll({
         attributes: [
           "uuid",

@@ -8,16 +8,15 @@ import {
   getDatasakitByPegawaiId,
 } from "../../../controllers/pegawai/datasakit/Datasakits.js";
 import { verifyPegawai } from "../../../middleware/verify.js";
-import { pegawaiOnly } from "../../../middleware/userOnly.js";
+import { pegawaiOnly, statistikOnly } from "../../../middleware/userOnly.js";
 
 const router = express.Router();
 
 router.get("/datasakits", verifyPegawai, getDatasakits);
+router.get("/datasakitstatistik", statistikOnly, getDatasakits);
 router.get("/datasakits/:id", verifyPegawai, pegawaiOnly, getDatasakitById);
 router.get(
   "/datasakits/pegawai/:id",
-  verifyPegawai,
-  pegawaiOnly,
   getDatasakitByPegawaiId
 );
 router.post("/datasakits", verifyPegawai, pegawaiOnly, createDatasakit);

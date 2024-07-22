@@ -5,7 +5,11 @@ import { Op } from "sequelize";
 export const getPengajuans = async (req, res) => {
   try {
     let response;
-    if (req.role === "dokter" || req.role === "admin") {
+    if (
+      req.role === "dokter" ||
+      req.role === "admin" ||
+      req.role === "kepala bidang"
+    ) {
       response = await Pengajuans.findAll({
         attributes: [
           "uuid",
