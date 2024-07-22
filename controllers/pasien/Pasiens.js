@@ -66,7 +66,7 @@ export const getPasienById = async (req, res) => {
   try {
     const pasien = await Pasiens.findOne({
       where: {
-        uuid: req.params.id,
+        id: req.params.id,
       },
     });
     if (!pasien) return res.status(404).json({ msg: "Data not found!" });

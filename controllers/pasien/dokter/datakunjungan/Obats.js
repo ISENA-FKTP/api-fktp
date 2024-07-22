@@ -88,20 +88,20 @@ export const getObatByStatus = async (req, res) => {
       return res.status(404).json({ msg: "Data not found!" });
     }
 
-    const ids = itemobat.map((obat) => obat.dataValues.id); // Mengambil semua ID dari itemobat
+    const ids = itemobat.map((obat) => obat.dataValues.id);
 
     let response;
     if (req.role === "dokter" || req.role === "apoteker") {
       response = await Obats.findAll({
         where: {
           id: {
-            [Op.in]: ids, // Menggunakan operator Op.in untuk mencari semua ID yang cocok
+            [Op.in]: ids,
           },
         },
         include: [
           {
             model: Pasiens,
-            attributes: ["uuid", "nama", "nobpjs"],
+            attributes: ["uuid", "nama", "nobpjs", "tgllahir"],
           },
         ],
       });
@@ -109,14 +109,14 @@ export const getObatByStatus = async (req, res) => {
       response = await Obats.findAll({
         where: {
           [Op.and]: [
-            { id: { [Op.in]: ids } }, // Menggunakan operator Op.in untuk mencari semua ID yang cocok
+            { id: { [Op.in]: ids } },
             { pasienId: req.dataValues.pasienId },
           ],
         },
         include: [
           {
             model: Pasiens,
-            attributes: ["uuid", "nama", "nobpjs"],
+            attributes: ["uuid", "nama", "nobpjs", "tgllahir"],
           },
         ],
       });

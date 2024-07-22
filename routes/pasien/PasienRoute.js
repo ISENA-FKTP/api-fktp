@@ -12,6 +12,7 @@ import { adminOnly, klinikOnly } from "../../middleware/userOnly.js";
 const router = express.Router();
 
 router.get("/pasiens", getPasiens);
+router.get("/pasiens/:id", getPasienById);
 router.get("/pasiens/nobpjs/:nobpjs", getPasienByNoBPJS);
 router.post("/pasiens", adminOnly, createPasien);
 router.patch("/pasiens/:id", klinikOnly, updatePasien);
