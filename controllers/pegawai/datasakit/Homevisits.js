@@ -203,10 +203,17 @@ export const getHomevisitByPegawaiId = async (req, res) => {
 };
 
 export const createHomevisit = async (req, res) => {
-  const { keluhan, pemeriksaanfisik, diagnosa, terapi, saranmedis, pegawaiId } =
-    req.body;
-  const filePath = req.file.path.replace("uploads\\", "");
-  const fotodokumentasi = filePath;
+  const {
+    keluhan,
+    pemeriksaanfisik,
+    diagnosa,
+    terapi,
+    saranmedis,
+    fotodokumentasi,
+    pegawaiId,
+  } = req.body;
+  // const filePath = req.file.path.replace("uploads\\", "");
+  // const fotodokumentasi = filePath;
 
   try {
     await Homevisits.create({

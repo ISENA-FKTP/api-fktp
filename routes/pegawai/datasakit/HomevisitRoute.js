@@ -25,7 +25,7 @@ router.get(
 router.post(
   "/homevisits",
   verifyPegawai,
-  upload.single("fotodokumentasi"),
+  // upload.single("fotodokumentasi"),
   pegawaiOnly,
   createHomevisit
 );

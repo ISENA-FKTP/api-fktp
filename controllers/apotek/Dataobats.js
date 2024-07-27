@@ -274,7 +274,6 @@ export const tambahKurangDataObats = async (req, res) => {
       if (updatedJumlahobat < 0) updatedJumlahobat = 0;
 
       await Deletedataobats.create({
-        uuid: uuidv4(),
         namaobat: itemobat.namaobat,
         jumlahobat: currentObat,
         tglmasuk: itemobat.tglmasuk,

@@ -23,7 +23,7 @@ router.get(
 router.post(
   "/datarekammedis",
   verifyPegawai,
-  upload.single("filerekammedis"),
+  // upload.single("filerekammedis"),
   createDatarekammedis
 );
 

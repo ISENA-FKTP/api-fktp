@@ -50,13 +50,6 @@ const Obats = db.define(
         notEmpty: true,
       },
     },
-    dosis: {
-      type: DataTypes.STRING,
-      allowNull: false,
-      validate: {
-        notEmpty: true,
-      },
-    },
     BMHP: {
       type: DataTypes.STRING,
       allowNull: false,

@@ -136,9 +136,9 @@ export const getDatarekammedisByPegawaiId = async (req, res) => {
 };
 
 export const createDatarekammedis = async (req, res) => {
-  const { keterangan, pegawaiId } = req.body;
-  const filePath = req.file.path.replace("uploads\\", "");
-  const filerekammedis = filePath;
+  const { keterangan, pegawaiId, filerekammedis} = req.body;
+  // const filePath = req.file.path.replace("uploads\\", "");
+  // const filerekammedis = filePath;
 
   if (!keterangan || !filerekammedis) {
     return res.status(400).json({ msg: "Semua kolom harus diisi!" });

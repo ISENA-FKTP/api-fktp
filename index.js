@@ -6,7 +6,7 @@ import helmet from "helmet";
 
 import UserRoute from "./routes/UserRoute.js";
 import AuthRoute from "./routes//login/AuthRoute.js";
-import TokenRoute from "./routes//login/TokenRoute.js"; // Perbarui import ini
+import TokenRoute from "./routes//login/TokenRoute.js";
 
 import PasienRoute from "./routes/pasien/PasienRoute.js";
 import AuthPasienRoute from "./routes/pasien/AuthPasienRoute.js";
@@ -20,8 +20,6 @@ import PelayananRoute from "./routes/pasien/dokter/datakunjungan/PelayananRoute.
 import PemeriksaanRoute from "./routes/pasien/dokter/datakunjungan/PemeriksaanRoute.js";
 import RiwayatalergiRoute from "./routes/pasien/dokter/datakunjungan/RiwayatalergiRoute.js";
 import TandatanganRoute from "./routes/pasien/dokter/datakunjungan/TandatanganRoute.js";
-
-import TotalpenyakitRoute from "./routes/pasien/data_statistik/TotalpenyakitRoute.js";
 
 import PegawaiRoute from "./routes/pegawai/PegawaiRoute.js";
 import AuthPegawaiRoute from "./routes/pegawai/AuthPegawaiRoute.js";
@@ -43,7 +41,7 @@ app.use(express.static("uploads"));
 app.use(
   cors({
     credentials: true,
-    origin: ["http://localhost:5173", "https://isena-fktp.vercel.app"],
+    origin: ["http://localhost:5173", "https://akusehat-bidokkes.web.app"],
   })
 );
 
@@ -90,12 +88,10 @@ app.use(PegawaiRoute);
 app.use(AuthPegawaiRoute);
 app.use(DatasakitRoute);
 app.use(HomevisitRoute);
-app.use(TotalpenyakitRoute);
 app.use(DeletedataobatRoute);
-app.use(TotalpenyakitRoute);
 app.use(Datarekammedis);
 
-const PORT = process.env.APP_PORT || 5000;
+const PORT = process.env.PORT || 8080;
 app.listen(PORT, () => {
   console.log(`Server up and running on port ${PORT}`);
 });
